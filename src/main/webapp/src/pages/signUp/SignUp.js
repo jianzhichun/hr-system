@@ -1,30 +1,33 @@
 import './SignUp.scss';
-import {Space, Input, Button} from "antd";
-import {Link} from "react-router-dom";
-import $ from "jquery";
+import { Modal, Form, Space, Input, Button } from "antd";
+import { Link } from "react-router-dom";
 import axios from "axios";
-import {BASE, POST} from "../../string";
+import { POST } from "../../string";
 
 export default function SignUp() {
 
     /**
      * login
      */
-    function signUp() {
-        let email = $('#email');
-        let password = $('#password');
-        let passwordVerify = $('#password-verify');
+    function signUp({ password, email, passwordVerify }) {
+        debugger
+        if (password !== passwordVerify) {
+            Modal.error({ content: 'Password don\'t match.' });
+        }
 
         axios({
             method: POST,
-            url: BASE + '',
+            url: '/api/employee/register',
             data: {
                 email: email,
-                password: password,
-                passwordVerify: passwordVerify
+                password: password
             }
-        }).then(response => {
-            //todo
+        }).then(({ data: { code, message } }) => {
+            if (!code) {
+                Modal.error({ content: message });
+            } else {
+                window.location.hash = '/login/';
+            }
         }).catch(error => {
             console.log(error);
         })
@@ -33,17 +36,73 @@ export default function SignUp() {
     return (
         <div className={'sign-up'}>
             <div className={'form'}>
-                <div className={'title'}>注册</div>
-                <Space direction={'vertical'}>
-                    <Input placeholder={'输入邮箱'} id={'email'}/>
-                    <Input.Password placeholder={'请输入密码'} id={'password'}/>
-                    <Input.Password placeholder={'再次请输入密码'} id={'password-verify'}/>
-                </Space>
-                <Button type={'primary'} className={'action-button'} onClick={signUp}>注册</Button>
+                <Form
+                    name="basic"
+                    labelCol={{
+                        span: 8,
+                    }}
+                    wrapperCol={{
+                        span: 16,
+                    }}
+                    initialValues={{
+                        remember: true,
+                    }}
+                    onFinish={signUp}
+                    autoComplete="off"
+                >
+                    <div className={'title'}>Register</div>
+                    <Space direction={'vertical'}>
+                        <Form.Item
+                            label="Email"
+                            name="email"
+                            rules={[
+                                { type: 'email' },
+                                {
+                                    required: true,
+                                    message: 'Please input your email!',
+                                },
+                            ]}
+                        ><Input />
+                        </Form.Item>
+                        <Form.Item label="Password"
+                            name="password"
+                            rules={[
+                                {
+                                    required: true,
+                                    message: 'Please input your password!',
+                                },
+                            ]}
+                        >
+                            <Input.Password />
+                        </Form.Item>
+                        <Form.Item label="Verify Password"
+                            name="passwordVerify"
+                            rules={[
+                                {
+                                    required: true,
+                                    message: 'Please input your password!',
+                                },
+                            ]}
+                        >
+                            <Input.Password />
+                        </Form.Item>
+                    </Space>
+                    <Form.Item
+                        wrapperCol={{
+                            offset: 8,
+                            span: 16,
+                        }}
+                    >
+                        <Button type="primary" htmlType="submit">
+                            Register
+                        </Button>
+                    </Form.Item>
+
+                </Form>
             </div>
 
             <div className={'more'}>
-                已经有账号? 去<Link to={'/login'}>登录</Link>.
+                Already got an account, <Link to={'/login'}>login</Link>.
             </div>
         </div>
     );

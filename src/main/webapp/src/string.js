@@ -2,4 +2,4 @@ export const POST = 'post';
 export const GET = 'get';
 
 
-export const BASE = 'localhost:8888'
+export const BASE = 'localhost:8080'

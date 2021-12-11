@@ -51,7 +51,7 @@ create table if not exists  salary
 create table if not exists  employee
 (
     id           bigint primary key auto_increment not null,
-    email        varchar(128),
+    email        varchar(128) unique,
     password     varchar(128),
     type         varchar(32),
     resign_time  date,

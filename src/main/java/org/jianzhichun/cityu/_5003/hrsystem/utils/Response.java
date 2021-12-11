@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 public class Response<T> {
-    private int code = 200;
+    private int code;
     private String message;
     private T data;
 
