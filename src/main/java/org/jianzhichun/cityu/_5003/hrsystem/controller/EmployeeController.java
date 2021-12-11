@@ -52,6 +52,10 @@ public class EmployeeController {
 
     @PostMapping("/register")
     public Response<Void> register(@RequestBody PayLoad payLoad) {
+        if (employeeMapper.selectCountByEmail(payLoad.getEmail()) > 1) {
+            return new Response<>(404, "This email has been taken");
+        }
+
         employeeMapper.insert(payLoad.getEmail(), HashUtil.sha256(payLoad.getPassword()));
         return new Response<>();
     }

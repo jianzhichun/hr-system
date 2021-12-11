@@ -24,4 +24,7 @@ public interface EmployeeMapper {
     @Insert("insert into employee(email, password) values(#{email}, #{password})")
     void insert(String email, String password);
 
+    @Select("select count(*) from employee where email = #{email}")
+    int selectCountByEmail(String email);
+
 }

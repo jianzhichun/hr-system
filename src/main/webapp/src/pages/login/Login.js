@@ -18,7 +18,7 @@ export default function Login() {
                 password: password
             }
         }).then(({ data: { code, message } }) => {
-            if (!code) {
+            if (code !== 0) {
                 Modal.error({ content: message });
             } else {
                 window.location.hash = '/app/';
@@ -31,17 +31,12 @@ export default function Login() {
     return (
         <div className={'login'}>
             <div className={'form'}>
+                <div className={'bold font-16 m-b-10'}>Login</div>
                 <Form
                     name="basic"
-                    labelCol={{
-                        span: 8,
-                    }}
-                    wrapperCol={{
-                        span: 16,
-                    }}
-                    initialValues={{
-                        remember: true,
-                    }}
+                    labelCol={{span: 8}}
+                    wrapperCol={{span: 16}}
+                    initialValues={{remember: true}}
                     onFinish={login}
                     autoComplete="off"
                 >
@@ -92,8 +87,7 @@ export default function Login() {
                         <Button type="primary" htmlType="submit">
                             Login
                         </Button>
-                        &nbsp; &nbsp;
-                        <Link to='/sign-up'>Register</Link>
+                        <Link to='/sign-up' className={'m-l-20'}>Register</Link>
                     </Form.Item>
 
                 </Form>

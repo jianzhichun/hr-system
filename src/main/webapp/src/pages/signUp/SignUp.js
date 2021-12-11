@@ -1,18 +1,18 @@
 import './SignUp.scss';
-import { Modal, Form, Space, Input, Button } from "antd";
-import { Link } from "react-router-dom";
+import {Modal, Form, Space, Input, Button} from "antd";
+import {Link} from "react-router-dom";
 import axios from "axios";
-import { POST } from "../../string";
+import {POST} from "../../string";
 
 export default function SignUp() {
 
     /**
-     * login
+     * sign up
      */
-    function signUp({ password, email, passwordVerify }) {
-        debugger
-        if (password !== passwordVerify) {
-            Modal.error({ content: 'Password don\'t match.' });
+    function signUp({password, email, verifyPassword}) {
+        if (password !== verifyPassword) {
+            Modal.error({content: 'Passwords don\'t match.'});
+            return;
         }
 
         axios({
@@ -22,9 +22,9 @@ export default function SignUp() {
                 email: email,
                 password: password
             }
-        }).then(({ data: { code, message } }) => {
-            if (!code) {
-                Modal.error({ content: message });
+        }).then(({data: {code, message}}) => {
+            if (code !== 0) {
+                Modal.error({content: message});
             } else {
                 window.location.hash = '/login/';
             }
@@ -38,53 +38,46 @@ export default function SignUp() {
             <div className={'form'}>
                 <Form
                     name="basic"
-                    labelCol={{
-                        span: 8,
-                    }}
-                    wrapperCol={{
-                        span: 16,
-                    }}
-                    initialValues={{
-                        remember: true,
-                    }}
+                    labelCol={{span: 8}}
+                    wrapperCol={{span: 16}}
+                    initialValues={{remember: true,}}
                     onFinish={signUp}
-                    autoComplete="off"
-                >
+                    autoComplete={"off"}>
                     <div className={'title'}>Register</div>
                     <Space direction={'vertical'}>
                         <Form.Item
                             label="Email"
                             name="email"
                             rules={[
-                                { type: 'email' },
+                                {type: 'email'},
                                 {
                                     required: true,
                                     message: 'Please input your email!',
                                 },
                             ]}
-                        ><Input />
+                        ><Input/>
                         </Form.Item>
                         <Form.Item label="Password"
-                            name="password"
-                            rules={[
-                                {
-                                    required: true,
-                                    message: 'Please input your password!',
-                                },
-                            ]}
+                                   name="password"
+                                   rules={[
+                                       {
+                                           required: true,
+                                           message: 'Please input your password!',
+                                       },
+                                   ]}
                         >
-                            <Input.Password />
+                            <Input.Password/>
                         </Form.Item>
-                        <Form.Item label="Verify Password"
-                            name="passwordVerify"
-                            rules={[
-                                {
-                                    required: true,
-                                    message: 'Please input your password!',
-                                },
-                            ]}
+                        <Form.Item label="Verify"
+                                   name="verifyPassword"
+                                   rules={[
+                                       {
+                                           required: true,
+                                           message: 'Please input your password!',
+                                       },
+                                   ]}
                         >
-                            <Input.Password />
+                            <Input.Password/>
                         </Form.Item>
                     </Space>
                     <Form.Item
@@ -102,7 +95,7 @@ export default function SignUp() {
             </div>
 
             <div className={'more'}>
-                Already got an account, <Link to={'/login'}>login</Link>.
+                Already got an account? <Link to={'/login'}>login</Link>.
             </div>
         </div>
     );
