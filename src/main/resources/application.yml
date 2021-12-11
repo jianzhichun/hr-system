@@ -1,0 +1,26 @@
+mybatis:
+  configuration:
+    map-underscore-to-camel-case: true
+  type-aliases-package: org.jianzhichun.cityu._5003.hrsystem
+spring:
+  datasource:
+    url: jdbc:h2:./data/h2Db
+    username: sa
+    password:
+    driver-class-name: org.h2.Driver
+
+  h2:
+    console:
+      enabled: true
+      path: /console
+      settings:
+        trace: false
+        web-allow-others: false
+  sql:
+    init:
+      schema-locations:
+        - classpath:init.sql
+      mode: always
+
+
+pagehelper.auto-dialect: true

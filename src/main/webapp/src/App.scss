@@ -1,0 +1,26 @@
+@import 'css/_color.scss';
+
+html, body {
+  height: 100%;
+  background-color: #f8f8f8 !important;
+}
+
+#root {
+  height: 100%;
+
+  .App {
+    height: 100%;
+
+    .ant-layout {
+      header {
+        width: 100%;
+        display: flex;
+        justify-content: space-between;
+
+        .account {
+          color: #fff;
+        }
+      }
+    }
+  }
+}
