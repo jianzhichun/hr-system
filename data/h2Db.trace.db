@@ -194,3 +194,18 @@ Caused by: java.lang.IllegalStateException: The file is locked: nio:/root/codesp
 	at org.h2.mvstore.FileStore.open(FileStore.java:172)
 	at org.h2.mvstore.MVStore.<init>(MVStore.java:381)
 	... 67 more
+2021-12-12 15:14:52 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "INSERT EMPLOYEE[*](NAME, EMAIL, ENROL_TIME, PHONE_NUMBER, ADDRESS, GENDER) VALUE (?, ?, ?, ?, ?, ?)"; expected "INTO"; SQL statement:
+insert employee(name, email, enrol_time, phone_number, address, gender) value (?, ?, ?, ?, ?, ?) [42001-200]
+2021-12-12 15:15:54 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "INSERT EMPLOYEE[*](NAME, EMAIL, ENROL_TIME, PHONE_NUMBER, ADDRESS, GENDER) VALUE (?, ?, ?, ?, ?, ?)"; expected "INTO"; SQL statement:
+insert employee(name, email, enrol_time, phone_number, address, gender) value (?, ?, ?, ?, ?, ?) [42001-200]
+2021-12-12 15:17:41 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "INSERT EMPLOYEE[*](NAME, EMAIL, ENROL_TIME, PHONE_NUMBER, ADDRESS, GENDER) VALUE (?, ?, ?, ?, ?, ?)"; expected "INTO"; SQL statement:
+insert employee(name, email, enrol_time, phone_number, address, gender) value (?, ?, ?, ?, ?, ?) [42001-200]
+2021-12-12 15:19:20 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "INSERT EMPLOYEE[*](NAME, EMAIL, ENROL_TIME, PHONE_NUMBER, ADDRESS, GENDER) VALUE (?, ?, ?, ?, ?, ?)"; expected "INTO"; SQL statement:
+insert employee(name, email, enrol_time, phone_number, address, gender) value (?, ?, ?, ?, ?, ?) [42001-200]
+2021-12-12 15:21:13 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "INSERT INTO EMPLOYEE(NAME, EMAIL, ENROL_TIME, PHONE_NUMBER, ADDRESS, GENDER) VALUE[*] (?, ?, ?, ?, ?, ?)"; expected "DIRECT, SORTED, DEFAULT, VALUES, SET, (, WITH, SELECT, TABLE, VALUES"; SQL statement:
+insert into employee(name, email, enrol_time, phone_number, address, gender) value (?, ?, ?, ?, ?, ?) [42001-200]

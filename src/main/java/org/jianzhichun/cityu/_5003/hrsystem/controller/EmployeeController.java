@@ -1,16 +1,19 @@
 package org.jianzhichun.cityu._5003.hrsystem.controller;
 
+import lombok.extern.slf4j.Slf4j;
 import org.jianzhichun.cityu._5003.hrsystem.model.Employee;
+import org.jianzhichun.cityu._5003.hrsystem.model.request.AddEmployeeRequest;
+import org.jianzhichun.cityu._5003.hrsystem.model.request.PageRequest;
+import org.jianzhichun.cityu._5003.hrsystem.utils.PageUtil;
 import org.jianzhichun.cityu._5003.hrsystem.utils.Response;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpSession;
+import java.sql.Timestamp;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
 
 /**
  * @author Zhang Zao
@@ -18,19 +21,43 @@ import javax.servlet.http.HttpSession;
  * @date 12/11/2021 10:20 PM
  */
 @RestController
+@Slf4j
 @RequestMapping("/api/employee")
 public class EmployeeController {
-
-    @Autowired
-    private HttpSession session;
-
+    
     @Autowired
     private JdbcTemplate jdbcTemplate;
 
-    @GetMapping("/{id}/breif")
-    public Response<Employee> findOne(@PathVariable String id) {
-        return new Response<>(jdbcTemplate.queryForObject("select name, email from employee where id = ?",
-                new BeanPropertyRowMapper<>(Employee.class), id));
+    @PostMapping("/add")
+    public Response<Void> register(@RequestBody AddEmployeeRequest request) {
+        log.info(request.toString());
+        Long count = jdbcTemplate.queryForObject(
+                "select count(1) from employee where email = ?",
+                Long.class,
+                request.getEmail()
+        );
+        log.info(count.toString());
+        if (null != count && count > 0) {
+            return new Response<>(503, "This email has been taken");
+        }
+
+        jdbcTemplate.update(
+                "insert into employee(name, email, enrol_time, phone_number, address, gender) values (?, ?, ?, ?, ?, ?)",
+                request.getName(), request.getEmail(), new Timestamp(request.getEnrol().getTime()), request.getContact(), request.getAddress(), request.getGender());
+        return new Response<>();
     }
 
+
+    @PostMapping("/list")
+    public Response<List<Employee>> listEmployees(@RequestBody PageRequest request) {
+        int count = jdbcTemplate.queryForObject("select count(1) from employee", Integer.class);
+        if (count == 0) {
+            return new Response<>(Collections.emptyList());
+        }
+
+        final PageUtil.StartAndLength startAndLength = PageUtil.getStartAndLength(request.getPage(), request.getSize(), count);
+        int start = startAndLength.getStart(), length = startAndLength.getLength();
+        return null;
+
+    }
 }
