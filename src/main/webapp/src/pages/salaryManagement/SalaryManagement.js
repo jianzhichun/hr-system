@@ -12,7 +12,7 @@ export default function SalaryManagement(props) {
     
     useEffect(() => {
         props.loadUser();
-    }, []);
+    }, [props]);
 
     return (
         <Layout style={{minHeight: 400}}>

@@ -12,7 +12,7 @@ export default function EmployeeManagement(props) {
 
     useEffect(() => {
         props.loadUser();
-    }, []);
+    }, [props]);
 
     return (
         <Layout style={{minHeight: 400}}>

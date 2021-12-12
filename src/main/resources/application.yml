@@ -4,6 +4,7 @@ mybatis:
   type-aliases-package: org.jianzhichun.cityu._5003.hrsystem
 
 spring:
+  jackson.time-zone: Asia/Hong_Kong
   session:
     timeout: 7200
     

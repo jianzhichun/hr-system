@@ -1,4 +1,4 @@
-import { Button, InputNumber, Form, Input, message } from "antd";
+import { Button, InputNumber, Form, message } from "antd";
 import axios from "axios";
 import { GET, POST } from "../../../util/string";
 import { useState, useRef, useMemo } from "react";
@@ -41,8 +41,7 @@ const DebounceSelect = ({ fetchOptions, debounceTimeout = 800, ...props }) => {
 }
 
 export default function NewSalary() {
-    const [employees, setEmployees] = useState([]),
-        fetchEmployeesByEmail = (email) => {
+    const fetchEmployeesByEmail = (email) => {
             return axios({
                 method: GET,
                 url: `/api/employee/queryByEmail?email=${email}`
@@ -84,7 +83,6 @@ export default function NewSalary() {
                     ]}>
                     <DebounceSelect
                         mode="multiple"
-                        value={employees}
                         placeholder="Select employees by email"
                         fetchOptions={fetchEmployeesByEmail}
                     />

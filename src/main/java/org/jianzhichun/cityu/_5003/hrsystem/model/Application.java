@@ -15,6 +15,8 @@ public class Application {
     private Long id;
     private Date date;
     private String resumeUrl;
+    private Long jobOfferId;
+    private String jobTitle;
     private String status;
 
 }

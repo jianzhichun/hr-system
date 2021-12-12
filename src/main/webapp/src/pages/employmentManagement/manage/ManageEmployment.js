@@ -4,7 +4,7 @@ import axios from "axios";
 import { GET, POST } from "../../../util/string";
 
 
-export default function SalaryManagement() {
+export default function EmploymentManagement() {
 
     const EditableCell = ({
         editing,
@@ -57,7 +57,7 @@ export default function SalaryManagement() {
         fetch = (pagination) => {
             return axios({
                 method: GET,
-                url: `/api/salary/page?page=${pagination.current}&size=${pagination.pageSize}`
+                url: `/api/employment/page?page=${pagination.current}&size=${pagination.pageSize}`
             }).then(({ data: { code, message, data } }) => {
                 if (code !== 0) {
                     message.error({ content: message })
@@ -97,7 +97,7 @@ export default function SalaryManagement() {
                 const item = newData[index];
                 axios({
                     method: POST,
-                    url: `/api/salary/update/${key}`,
+                    url: `/api/employment/update/${key}`,
                     data: row
                 }).then(({ data: { code, message: msg } }) => {
                     if (code !== 0) {
@@ -121,18 +121,19 @@ export default function SalaryManagement() {
 
     const columns = [
         {
-            title: 'Employee',
-            dataIndex: 'employeeName',
+            title: 'Date',
+            dataIndex: 'date',
             width: '25%'
         },
         {
-            title: 'Department',
-            dataIndex: 'departmentName',
+            title: 'Resume URL',
+            dataIndex: 'resumeUrl',
             width: '15%',
+            editable: true,
         },
         {
-            title: 'Amount',
-            dataIndex: 'amount',
+            title: 'Status',
+            dataIndex: 'status',
             width: '40%',
             editable: true,
         },
@@ -154,7 +155,7 @@ export default function SalaryManagement() {
                         <Typography.Link
                             onClick={() =>
                                 axios({
-                                    method: POST, url: `/api/salary/delete/${record.key}`
+                                    method: POST, url: `/api/employment/delete/${record.key}`
                                 }).then(({ data: { code, message: msg } }) => {
                                     if (code !== 0) {
                                         message.error({ content: msg })
@@ -190,7 +191,7 @@ export default function SalaryManagement() {
             ...col,
             onCell: (record) => ({
                 record,
-                inputType: col.dataIndex === 'amount' ? 'number' : 'text',
+                inputType: 'text',
                 dataIndex: col.dataIndex,
                 title: col.title,
                 editing: isEditing(record),

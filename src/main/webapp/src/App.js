@@ -161,7 +161,7 @@ function App() {
                                         <SalaryManagement loadUser={loadUser}/>
                                     </Route>
                                     <Route exact={true} path={'/app/employment/*'}>
-                                        <EmploymentManagement/>
+                                        <EmploymentManagement loadUser={loadUser}/>
                                     </Route>
                                     <Route exact={true} path={'/app/profile/*'}>
                                         <Profile/>
