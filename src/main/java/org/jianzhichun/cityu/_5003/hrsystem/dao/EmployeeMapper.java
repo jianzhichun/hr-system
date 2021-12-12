@@ -1,6 +1,7 @@
 package org.jianzhichun.cityu._5003.hrsystem.dao;
 
 import org.apache.ibatis.annotations.Insert;
+import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
 
 import java.util.List;
@@ -10,6 +11,7 @@ import java.util.List;
  * @version 1.0
  * @date 12/11/2021 10:16 PM
  */
+@Mapper
 public interface EmployeeMapper {
 
 

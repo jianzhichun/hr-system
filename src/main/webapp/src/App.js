@@ -9,22 +9,31 @@ import Login from "./pages/login/Login";
 import SignUp from "./pages/signUp/SignUp";
 import EmployeeManagement from "./pages/employeeManagement/EmployeeManagement";
 import Layout, {Header} from "antd/es/layout/layout";
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import {Menu} from "antd";
 import {RedEnvelopeOutlined, TableOutlined, TeamOutlined, UsergroupAddOutlined} from "@ant-design/icons";
 import AttendanceManagement from "./pages/attendanceManagement/AttendanceManagement";
 import SalaryManagement from "./pages/salaryManagement/SalaryManagement";
 import EmploymentManagement from "./pages/employmentManagement/EmploymentManagement";
+import Home from "./pages/home/Home";
 
 
 function App() {
 
     const [user, setUser] = useState({name: 'Ross'});  // set to null when in production
 
+    useEffect(() => {
+        document.title = 'Welcome to HR system';
+    }, []);
+
     return (
         <div className="App">
             <Router>
-                <Route path={'/login'}>
+                <Route path={"/"} exact={true}>
+                    <Home/>
+                </Route>
+
+                <Route path={'/login'} exact={true}>
                     <Login/>
                 </Route>
 
