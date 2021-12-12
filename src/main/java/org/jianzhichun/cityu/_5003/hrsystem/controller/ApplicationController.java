@@ -1,7 +1,7 @@
 package org.jianzhichun.cityu._5003.hrsystem.controller;
 
 
-import org.jianzhichun.cityu._5003.hrsystem.domain.Application;
+import org.jianzhichun.cityu._5003.hrsystem.model.Application;
 import org.jianzhichun.cityu._5003.hrsystem.utils.Page;
 import org.jianzhichun.cityu._5003.hrsystem.utils.Response;
 import org.springframework.beans.factory.annotation.Autowired;

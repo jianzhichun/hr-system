@@ -1,6 +1,6 @@
 package org.jianzhichun.cityu._5003.hrsystem.controller;
 
-import org.jianzhichun.cityu._5003.hrsystem.domain.Employee;
+import org.jianzhichun.cityu._5003.hrsystem.model.Employee;
 import org.jianzhichun.cityu._5003.hrsystem.model.request.LoginRequest;
 import org.jianzhichun.cityu._5003.hrsystem.model.request.SignUpRequest;
 import org.jianzhichun.cityu._5003.hrsystem.utils.HashUtil;
@@ -33,8 +33,14 @@ public class EmployeeController {
         return user instanceof Employee ? new Response<>(user) : new Response<>(304, "Session expired.");
     }
 
+    @GetMapping("/logout")
+    public Response<Void> logout() {
+        session.removeAttribute("user");
+        return new Response<>();
+    }
+
     @PostMapping("/login")
-    public Response<Void> doLogin(@RequestBody LoginRequest payLoad) {
+    public Response<Void> login(@RequestBody LoginRequest payLoad) {
         Employee employee = jdbcTemplate.queryForObject(
                 "select * from employee where email = ?",
                 new BeanPropertyRowMapper<>(Employee.class),

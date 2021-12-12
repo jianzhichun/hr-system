@@ -1,4 +1,4 @@
-package org.jianzhichun.cityu._5003.hrsystem.domain;
+package org.jianzhichun.cityu._5003.hrsystem.model;
 
 import lombok.Data;
 
