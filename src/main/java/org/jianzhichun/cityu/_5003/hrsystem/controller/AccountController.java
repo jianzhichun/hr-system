@@ -1,7 +1,7 @@
 package org.jianzhichun.cityu._5003.hrsystem.controller;
 
-import org.jianzhichun.cityu._5003.hrsystem.model.Employee;
-import org.jianzhichun.cityu._5003.hrsystem.model.mapper.AccountMapper;
+import org.jianzhichun.cityu._5003.hrsystem.model.po.Employee;
+import org.jianzhichun.cityu._5003.hrsystem.mapper.AccountMapper;
 import org.jianzhichun.cityu._5003.hrsystem.model.request.LoginRequest;
 import org.jianzhichun.cityu._5003.hrsystem.model.request.SignUpRequest;
 import org.jianzhichun.cityu._5003.hrsystem.utils.HashUtil;

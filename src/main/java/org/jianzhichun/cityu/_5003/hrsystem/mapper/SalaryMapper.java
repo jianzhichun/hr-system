@@ -1,9 +1,9 @@
-package org.jianzhichun.cityu._5003.hrsystem.model.mapper;
+package org.jianzhichun.cityu._5003.hrsystem.mapper;
 
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
-import org.jianzhichun.cityu._5003.hrsystem.model.Salary;
+import org.jianzhichun.cityu._5003.hrsystem.model.po.Salary;
 
 import java.math.BigDecimal;
 import java.util.List;

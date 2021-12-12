@@ -2,8 +2,8 @@ package org.jianzhichun.cityu._5003.hrsystem.controller;
 
 import java.util.List;
 
-import org.jianzhichun.cityu._5003.hrsystem.model.Department;
-import org.jianzhichun.cityu._5003.hrsystem.model.mapper.DepartmentMapper;
+import org.jianzhichun.cityu._5003.hrsystem.model.po.Department;
+import org.jianzhichun.cityu._5003.hrsystem.mapper.DepartmentMapper;
 import org.jianzhichun.cityu._5003.hrsystem.utils.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;

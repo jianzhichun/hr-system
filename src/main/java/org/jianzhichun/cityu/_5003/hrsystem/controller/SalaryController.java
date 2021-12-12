@@ -4,8 +4,8 @@ package org.jianzhichun.cityu._5003.hrsystem.controller;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 
-import org.jianzhichun.cityu._5003.hrsystem.model.Salary;
-import org.jianzhichun.cityu._5003.hrsystem.model.mapper.SalaryMapper;
+import org.jianzhichun.cityu._5003.hrsystem.model.po.Salary;
+import org.jianzhichun.cityu._5003.hrsystem.mapper.SalaryMapper;
 import org.jianzhichun.cityu._5003.hrsystem.model.request.AddSalaryRequest;
 import org.jianzhichun.cityu._5003.hrsystem.model.request.UpdateSalaryRequest;
 import org.jianzhichun.cityu._5003.hrsystem.utils.Response;

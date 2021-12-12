@@ -2,8 +2,8 @@ package org.jianzhichun.cityu._5003.hrsystem.controller;
 
 import java.util.List;
 
-import org.jianzhichun.cityu._5003.hrsystem.model.Position;
-import org.jianzhichun.cityu._5003.hrsystem.model.mapper.PositionMapper;
+import org.jianzhichun.cityu._5003.hrsystem.model.po.Position;
+import org.jianzhichun.cityu._5003.hrsystem.mapper.PositionMapper;
 import org.jianzhichun.cityu._5003.hrsystem.utils.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;

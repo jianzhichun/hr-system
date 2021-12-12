@@ -5,8 +5,8 @@ import java.util.List;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 
-import org.jianzhichun.cityu._5003.hrsystem.model.JobOffer;
-import org.jianzhichun.cityu._5003.hrsystem.model.mapper.JobOfferMapper;
+import org.jianzhichun.cityu._5003.hrsystem.model.po.JobOffer;
+import org.jianzhichun.cityu._5003.hrsystem.mapper.JobOfferMapper;
 import org.jianzhichun.cityu._5003.hrsystem.model.request.AddJobOfferRequest;
 import org.jianzhichun.cityu._5003.hrsystem.model.request.UpdateJobOfferRequest;
 import org.jianzhichun.cityu._5003.hrsystem.utils.Response;

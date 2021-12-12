@@ -1,4 +1,4 @@
-package org.jianzhichun.cityu._5003.hrsystem.model.mapper;
+package org.jianzhichun.cityu._5003.hrsystem.mapper;
 
 import java.util.Date;
 import java.util.List;
@@ -7,7 +7,7 @@ import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
-import org.jianzhichun.cityu._5003.hrsystem.model.Employee;
+import org.jianzhichun.cityu._5003.hrsystem.model.po.Employee;
 
 @Mapper
 public interface EmployeeMapper {

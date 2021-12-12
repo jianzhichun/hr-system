@@ -1,7 +1,7 @@
-package org.jianzhichun.cityu._5003.hrsystem.model.mapper;
+package org.jianzhichun.cityu._5003.hrsystem.mapper;
 
 import org.apache.ibatis.annotations.*;
-import org.jianzhichun.cityu._5003.hrsystem.model.Attendance;
+import org.jianzhichun.cityu._5003.hrsystem.model.po.Attendance;
 
 import java.util.Date;
 import java.util.List;

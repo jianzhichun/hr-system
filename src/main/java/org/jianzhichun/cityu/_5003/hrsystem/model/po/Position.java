@@ -1,6 +1,7 @@
-package org.jianzhichun.cityu._5003.hrsystem.model;
+package org.jianzhichun.cityu._5003.hrsystem.model.po;
 
 import lombok.Data;
+
 
 /**
  * @author Zhang Zao
@@ -8,8 +9,9 @@ import lombok.Data;
  * @date 12/11/2021 10:16 PM
  */
 @Data
-public class Department {
+public class Position {
 
     private Long id;
     private String name;
+    private String level;
 }

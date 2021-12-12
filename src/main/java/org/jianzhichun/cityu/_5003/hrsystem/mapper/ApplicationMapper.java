@@ -1,10 +1,10 @@
-package org.jianzhichun.cityu._5003.hrsystem.model.mapper;
+package org.jianzhichun.cityu._5003.hrsystem.mapper;
 
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
-import org.jianzhichun.cityu._5003.hrsystem.model.Application;
+import org.jianzhichun.cityu._5003.hrsystem.model.po.Application;
 
 import java.util.Date;
 import java.util.List;

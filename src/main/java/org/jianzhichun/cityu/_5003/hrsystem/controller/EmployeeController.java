@@ -2,11 +2,10 @@ package org.jianzhichun.cityu._5003.hrsystem.controller;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import org.jianzhichun.cityu._5003.hrsystem.model.Attendance;
-import org.jianzhichun.cityu._5003.hrsystem.model.Employee;
-import org.jianzhichun.cityu._5003.hrsystem.model.request.UpdateEmployeeRequest;
-import org.jianzhichun.cityu._5003.hrsystem.model.mapper.AccountMapper;
-import org.jianzhichun.cityu._5003.hrsystem.model.mapper.EmployeeMapper;
+import org.jianzhichun.cityu._5003.hrsystem.model.po.Attendance;
+import org.jianzhichun.cityu._5003.hrsystem.model.po.Employee;
+import org.jianzhichun.cityu._5003.hrsystem.mapper.AccountMapper;
+import org.jianzhichun.cityu._5003.hrsystem.mapper.EmployeeMapper;
 import org.jianzhichun.cityu._5003.hrsystem.model.request.AddEmployeeRequest;
 import org.jianzhichun.cityu._5003.hrsystem.utils.Response;
 import org.springframework.beans.factory.annotation.Autowired;

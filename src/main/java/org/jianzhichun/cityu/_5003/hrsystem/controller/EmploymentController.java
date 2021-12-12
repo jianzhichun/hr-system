@@ -6,8 +6,8 @@ import java.util.Date;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 
-import org.jianzhichun.cityu._5003.hrsystem.model.Application;
-import org.jianzhichun.cityu._5003.hrsystem.model.mapper.ApplicationMapper;
+import org.jianzhichun.cityu._5003.hrsystem.model.po.Application;
+import org.jianzhichun.cityu._5003.hrsystem.mapper.ApplicationMapper;
 import org.jianzhichun.cityu._5003.hrsystem.model.request.AddApplicationRequest;
 import org.jianzhichun.cityu._5003.hrsystem.model.request.UpdateApplicationRequest;
 import org.jianzhichun.cityu._5003.hrsystem.utils.Response;
