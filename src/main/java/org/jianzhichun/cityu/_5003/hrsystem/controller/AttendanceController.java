@@ -1,7 +1,10 @@
 package org.jianzhichun.cityu._5003.hrsystem.controller;
 
 import cn.dev33.satoken.annotation.SaCheckLogin;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import lombok.extern.slf4j.Slf4j;
+import org.jianzhichun.cityu._5003.hrsystem.model.Attendance;
 import org.jianzhichun.cityu._5003.hrsystem.model.Employee;
 import org.jianzhichun.cityu._5003.hrsystem.model.mapper.AccountMapper;
 import org.jianzhichun.cityu._5003.hrsystem.model.mapper.AttendanceMapper;
@@ -38,5 +41,10 @@ public class AttendanceController {
         }
         attendanceMapper.insert(request.getEid(), request.getStart(), request.getEnd(), request.getType());
         return new Response<>();
+    }
+
+    @GetMapping("/page")
+    public Response<PageInfo<Attendance>> page(@RequestParam("page") int page, @RequestParam("size") int size) {
+        return new Response<>(PageHelper.startPage(page, size).doSelectPageInfo(() -> attendanceMapper.findAll()));
     }
 }

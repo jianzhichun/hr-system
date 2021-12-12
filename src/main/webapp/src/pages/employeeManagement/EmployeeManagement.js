@@ -37,8 +37,8 @@ export default function EmployeeManagement(props) {
                     <HashRouter>
                         <Switch>
                             <Route path={'/app/employee/'} exact={true}>
-                                <div>
-                                    
+                                <div style={{backgroundColor: '#fff', padding: 24}}>
+                                    Please click on the sider to get started.
                                 </div>
                             </Route>
                             <Route path={'/app/employee/add'}>

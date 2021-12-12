@@ -7,6 +7,7 @@ import {Route, Switch} from "react-router";
 import NewEmployment from "../employmentManagement/new/NewEmployment";
 import ManageEmployment from "../employmentManagement/manage/ManageEmployment";
 import NewAttendance from "./new/NewAttendance";
+import ManageAttendance from "./manage/ManageAttendance";
 
 export default function AttendanceManagement () {
 
@@ -33,15 +34,15 @@ export default function AttendanceManagement () {
                     <HashRouter>
                         <Switch>
                             <Route path={'/app/attendance/'} exact={true}>
-                                <div>
-
+                                <div style={{backgroundColor: '#fff', padding: 24}}>
+                                    Please click on the sider to get started.
                                 </div>
                             </Route>
                             <Route path={'/app/attendance/add'}>
                                 <NewAttendance/>
                             </Route>
                             <Route path={'/app/attendance/main'}>
-                                <ManageEmployment/>
+                                <ManageAttendance/>
                             </Route>
                         </Switch>
                     </HashRouter>
