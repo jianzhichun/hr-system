@@ -9,7 +9,7 @@ export default function SignUp() {
     /**
      * sign up
      */
-    function signUp({password, email, verifyPassword}) {
+    function signUp({name, password, email, verifyPassword}) {
         if (password !== verifyPassword) {
             Modal.error({content: 'Passwords don\'t match.'});
             return;
@@ -19,6 +19,7 @@ export default function SignUp() {
             method: POST,
             url: '/api/employee/register',
             data: {
+                name: name,
                 email: email,
                 password: password
             }
@@ -44,42 +45,51 @@ export default function SignUp() {
                     onFinish={signUp}
                     autoComplete={"off"}>
                     <div className={'title'}>Register</div>
-                    <Space direction={'vertical'}>
-                        <Form.Item
-                            label="Email"
-                            name="email"
-                            rules={[
-                                {type: 'email'},
-                                {
-                                    required: true,
-                                    message: 'Please input your email!',
-                                },
-                            ]}
-                        ><Input/>
-                        </Form.Item>
-                        <Form.Item label="Password"
-                                   name="password"
-                                   rules={[
-                                       {
-                                           required: true,
-                                           message: 'Please input your password!',
-                                       },
-                                   ]}
-                        >
-                            <Input.Password/>
-                        </Form.Item>
-                        <Form.Item label="Verify"
-                                   name="verifyPassword"
-                                   rules={[
-                                       {
-                                           required: true,
-                                           message: 'Please input your password!',
-                                       },
-                                   ]}
-                        >
-                            <Input.Password/>
-                        </Form.Item>
-                    </Space>
+                    <Form.Item
+                        label="Name"
+                        name="name"
+                        rules={[
+                            {
+                                required: true,
+                                message: 'Please input your name!',
+                            },
+                        ]}
+                    ><Input/>
+                    </Form.Item>
+                    <Form.Item
+                        label="Email"
+                        name="email"
+                        rules={[
+                            {type: 'email'},
+                            {
+                                required: true,
+                                message: 'Please input your email!',
+                            },
+                        ]}
+                    ><Input/>
+                    </Form.Item>
+                    <Form.Item label="Password"
+                               name="password"
+                               rules={[
+                                   {
+                                       required: true,
+                                       message: 'Please input your password!',
+                                   },
+                               ]}
+                    >
+                        <Input.Password/>
+                    </Form.Item>
+                    <Form.Item label="Verify"
+                               name="verifyPassword"
+                               rules={[
+                                   {
+                                       required: true,
+                                       message: 'Please input your password!',
+                                   },
+                               ]}
+                    >
+                        <Input.Password/>
+                    </Form.Item>
                     <Form.Item
                         wrapperCol={{
                             offset: 8,

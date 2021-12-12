@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import axios from "axios";
 import { POST } from "../../util/string";
 
-export default function Login() {
+export default function Login(props) {
 
     /**
      * login
@@ -21,6 +21,7 @@ export default function Login() {
             if (code !== 0) {
                 Modal.error({ content: message });
             } else {
+                props.loadUser();
                 window.location.hash = '/app/';
             }
         }).catch(error => {

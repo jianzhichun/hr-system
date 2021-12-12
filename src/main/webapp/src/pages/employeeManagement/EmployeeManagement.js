@@ -17,12 +17,12 @@ export default function EmployeeManagement() {
                 <Menu>
                     <Menu.Item>
                         <Link to={'/app/employee/add'}>
-                            添加新员工
+                            Add new
                         </Link>
                     </Menu.Item>
                     <Menu.Item>
                         <Link to={'/app/employee/main'}>
-                            管理员工
+                            Manage
                         </Link>
                     </Menu.Item>
                 </Menu>

@@ -23,8 +23,8 @@ public interface EmployeeMapper {
     EmployeeDO findOneByEmail(String email);
 
 
-    @Insert("insert into employee(email, password) values(#{email}, #{password})")
-    void insert(String email, String password);
+    @Insert("insert into employee(name, email, password) values(#{name}, #{email}, #{password})")
+    void insert(String name, String email, String password);
 
     @Select("select count(*) from employee where email = #{email}")
     int selectCountByEmail(String email);

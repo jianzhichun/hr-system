@@ -16,6 +16,8 @@ import AttendanceManagement from "./pages/attendanceManagement/AttendanceManagem
 import SalaryManagement from "./pages/salaryManagement/SalaryManagement";
 import EmploymentManagement from "./pages/employmentManagement/EmploymentManagement";
 import Home from "./pages/home/Home";
+import axios from "axios";
+import {GET} from "./util/string";
 
 
 function App() {
@@ -33,8 +35,22 @@ function App() {
         height: 400
     }
 
+    function loadUser() {
+        axios({
+            method: GET,
+            url: '/api/employee/me'
+        }).then(({ data: { code, message, data} }) => {
+            if (code === 0) {
+                setUser(data);
+            } else {
+                window.location.hash = '/login'
+            }
+        })
+    }
+
     useEffect(() => {
         document.title = 'Welcome to HR system';
+        loadUser();
     }, []);
 
     return (
@@ -45,7 +61,7 @@ function App() {
                 </Route>
 
                 <Route path={'/login'} exact={true}>
-                    <Login/>
+                    <Login loadUser={loadUser}/>
                 </Route>
 
                 <Route path={'/sign-up'}>

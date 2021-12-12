@@ -5,6 +5,7 @@ import lombok.Data;
 
 import org.jianzhichun.cityu._5003.hrsystem.dao.EmployeeDO;
 import org.jianzhichun.cityu._5003.hrsystem.dao.EmployeeMapper;
+import org.jianzhichun.cityu._5003.hrsystem.model.request.SignUpRequest;
 import org.jianzhichun.cityu._5003.hrsystem.utils.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -33,7 +34,11 @@ public class EmployeeController {
 
     @GetMapping("/me")
     public Response<EmployeeDO> me() {
-        return new Response<>((EmployeeDO)StpUtil.getSession().get("user"));
+        try {
+            return new Response<>((EmployeeDO) StpUtil.getSession().get("user"));
+        } catch (Exception e) {
+            return new Response<>(304, "session expired");
+        }
     }
 
     @PostMapping("/login")
@@ -51,12 +56,12 @@ public class EmployeeController {
     }
 
     @PostMapping("/register")
-    public Response<Void> register(@RequestBody PayLoad payLoad) {
-        if (employeeMapper.selectCountByEmail(payLoad.getEmail()) > 1) {
+    public Response<Void> register(@RequestBody SignUpRequest request) {
+        if (employeeMapper.selectCountByEmail(request.getEmail()) > 1) {
             return new Response<>(404, "This email has been taken");
         }
 
-        employeeMapper.insert(payLoad.getEmail(), HashUtil.sha256(payLoad.getPassword()));
+        employeeMapper.insert(request.getName(), request.getEmail(), HashUtil.sha256(request.getPassword()));
         return new Response<>();
     }
 }
