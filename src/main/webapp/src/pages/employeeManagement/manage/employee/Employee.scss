@@ -1,10 +1,15 @@
 .employee {
   width: 100%;
   display: flex;
-  border: 1px solid #ddd;
+  border-bottom: 1px solid #eee;
   border-top: none;
   padding: 10px;
   justify-content: space-between;
+  transition: 0.2s;
+
+  &:hover {
+    background-color: #f8f8f8;
+  }
 
   &:nth-child(1) {
     border-top: 1px solid #ddd;
