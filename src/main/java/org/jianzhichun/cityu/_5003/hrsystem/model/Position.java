@@ -14,5 +14,4 @@ public class Position {
     private Long id;
     private String name;
     private String level;
-    private Long departmentId;
 }

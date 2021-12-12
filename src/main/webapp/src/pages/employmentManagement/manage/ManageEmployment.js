@@ -64,9 +64,13 @@ export default function EmploymentManagement() {
             stringMode
             style={{ width: 200 }}
         /> : <Input />;
-        if (dataIndex === 'jobTitle') {
+        if (dataIndex === 'jobOfferId') {
             inputNode = <DebounceSelect
                 mode="multiple"
+                value={{
+                    label: record['jobTitle'],
+                    value: record['jobOfferId']
+                }}
                 placeholder="Select job offer by name"
                 fetchOptions={fetchJobOffersByName}
             />;
@@ -179,7 +183,10 @@ export default function EmploymentManagement() {
             title: 'Job',
             dataIndex: 'jobOfferId',
             width: '25%',
-            editable: true
+            editable: true,
+            render: (_, record) => {
+                return <div>{record['jobTitle']}</div>
+            }
         },
         {
             title: 'Resume URL',

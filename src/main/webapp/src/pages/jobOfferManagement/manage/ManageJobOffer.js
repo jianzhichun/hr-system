@@ -1,10 +1,59 @@
-import React, { useEffect, useState } from 'react';
-import { message, Table, Input, InputNumber, Popconfirm, Form, Typography } from 'antd';
+import React, { useState, useRef, useMemo, useEffect } from 'react';
+import { message, Table, Input, InputNumber, DatePicker, Popconfirm, Form, Typography } from 'antd';
 import axios from "axios";
 import { GET, POST } from "../../../util/string";
+import { Select, Spin } from 'antd';
+import debounce from 'lodash/debounce';
+import moment from 'moment';
 
+const DebounceSelect = ({ fetchOptions, debounceTimeout = 800, ...props }) => {
+    const [fetching, setFetching] = useState(false);
+    const [options, setOptions] = useState([]);
+    const fetchRef = useRef(0);
+    const debounceFetcher = useMemo(() => {
+        const loadOptions = (value) => {
+            fetchRef.current += 1;
+            const fetchId = fetchRef.current;
+            setOptions([]);
+            setFetching(true);
+            fetchOptions(value).then((newOptions) => {
+                if (fetchId !== fetchRef.current) {
+                    // for fetch callback order
+                    return;
+                }
 
-export default function JobOfferManagement() {
+                setOptions(newOptions);
+                setFetching(false);
+            });
+        };
+
+        return debounce(loadOptions, debounceTimeout);
+    }, [fetchOptions, debounceTimeout]);
+    return (
+        <Select
+            labelInValue
+            filterOption={false}
+            onSearch={debounceFetcher}
+            notFoundContent={fetching ? <Spin size="small" /> : null}
+            {...props}
+            options={options}
+        />
+    );
+}
+
+export default function EmploymentJobOffer() {
+
+    const fetchDepartmentsByName = (departmentName) => {
+        return axios({
+            method: GET,
+            url: `/api/department/queryByName?name=${departmentName}`
+        }).then(({ data: { code, message, data } }) => data.map(item => ({ label: item.name, value: item.id })))
+    }, fetchPositionsByName = (name) => {
+        return axios({
+            method: GET,
+            url: `/api/position/queryByName?name=${name}`
+        }).then(({ data: { code, message, data } }) => data.map(item => ({ label: `${item.name}(${item.level})`, value: item.id })))
+    };
 
     const EditableCell = ({
         editing,
@@ -16,11 +65,30 @@ export default function JobOfferManagement() {
         children,
         ...restProps
     }) => {
-        const inputNode = inputType === 'number' ? <InputNumber min="0"
-            step="0.000001"
-            stringMode
-            style={{ width: 200 }}
-        /> : <Input />;
+        let inputNode;
+        if (dataIndex === 'departmentId') {
+            inputNode = <DebounceSelect
+                mode="multiple"
+                placeholder="Select department by name"
+                fetchOptions={fetchDepartmentsByName}
+            />;
+        } else if (dataIndex === 'positionId') {
+            inputNode = <DebounceSelect
+                value={[{
+                    label: record.positionName,
+                    value: record.positionId
+                }]}
+                mode="multiple"
+                placeholder="Select position by name"
+                fetchOptions={fetchPositionsByName}
+            />;
+        } else if (dataIndex === 'dueDate') {
+            inputNode = <DatePicker />
+        } else if (dataIndex === 'number') {
+            inputNode = <InputNumber />
+        } else {
+            inputNode = <Input />;
+        }
         return (
             <td {...restProps}>
                 {editing ? (
@@ -63,7 +131,7 @@ export default function JobOfferManagement() {
                     message.error({ content: message })
                 } else {
                     setData(data.list.map(item => {
-                        return { ...item, key: item.id };
+                        return { ...item, key: item.id, dueDate: moment(item.dueDate) };
                     }));
                     setPagination({
                         current: data.pageNum,
@@ -98,7 +166,7 @@ export default function JobOfferManagement() {
                 axios({
                     method: POST,
                     url: `/api/joboffer/update/${key}`,
-                    data: row
+                    data: {...row, departmentId: row.department[0].value, positionId: row.position[0].value}
                 }).then(({ data: { code, message: msg } }) => {
                     if (code !== 0) {
                         message.error({ content: msg });
@@ -121,28 +189,48 @@ export default function JobOfferManagement() {
 
     const columns = [
         {
-            title: 'Date',
-            dataIndex: 'date',
-            width: '25%'
+            title: 'Title',
+            dataIndex: 'title',
+            width: '15%',
+            editable: true
         },
         {
-            title: 'Job',
-            dataIndex: 'jobTitle',
-            width: '25%'
+            title: 'Number',
+            dataIndex: 'number',
+            width: '10%',
+            editable: true,
         },
         {
-            title: 'Resume URL',
-            dataIndex: 'resumeUrl',
+            title: 'Due Date',
+            dataIndex: 'dueDate',
             width: '15%',
             editable: true,
             render: (_, record) => {
-                return <a onClick={()=>window.open(record['resumeUrl'])}>{record['resumeUrl']}</a>
+                return <>{record.dueDate.format("YYYY-MM-DD")}</>
             }
         },
         {
+            title: 'Department',
+            dataIndex: 'department',
+            width: '15%',
+            editable: true,
+            render: (_, record) => {
+                return <>{record.departmentName}</>
+            }
+        },
+        {
+            title: 'Position',
+            dataIndex: 'position',
+            width: '15%',
+            editable: true,
+            render: (_, record) => {
+                return <>{record.positionName}</>
+            }
+        },  
+        {
             title: 'Status',
             dataIndex: 'status',
-            width: '40%',
+            width: '20%',
             editable: true,
         },
         {

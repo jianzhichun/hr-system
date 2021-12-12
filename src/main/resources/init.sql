@@ -25,7 +25,7 @@ create table if not exists job_offer (
     title varchar(128),
     department_id bigint,
     number bigint,
-    due_date timestamp,
+    due_date date,
     status varchar(128),
     position_id bigint
 );
@@ -33,8 +33,7 @@ create table if not exists job_offer (
 create table if not exists position (
     id bigint primary key auto_increment not null,
     name varchar(128),
-    level varchar(32),
-    department_id bigint
+    level varchar(32)
 );
 
 create table if not exists salary (

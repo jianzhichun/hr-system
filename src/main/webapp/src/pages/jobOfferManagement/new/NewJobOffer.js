@@ -1,15 +1,63 @@
-import { Button, Form, Input, message } from "antd";
+import { Button, Form, Input, InputNumber, message, DatePicker } from "antd";
 import axios from "axios";
-import { POST } from "../../../util/string";
+import { GET, POST } from "../../../util/string";
+import { useState, useRef, useMemo } from "react";
+import { Select, Spin } from 'antd';
+import debounce from 'lodash/debounce';
+
+const DebounceSelect = ({ fetchOptions, debounceTimeout = 800, ...props }) => {
+    const [fetching, setFetching] = useState(false);
+    const [options, setOptions] = useState([]);
+    const fetchRef = useRef(0);
+    const debounceFetcher = useMemo(() => {
+        const loadOptions = (value) => {
+            fetchRef.current += 1;
+            const fetchId = fetchRef.current;
+            setOptions([]);
+            setFetching(true);
+            fetchOptions(value).then((newOptions) => {
+                if (fetchId !== fetchRef.current) {
+                    // for fetch callback order
+                    return;
+                }
+
+                setOptions(newOptions);
+                setFetching(false);
+            });
+        };
+
+        return debounce(loadOptions, debounceTimeout);
+    }, [fetchOptions, debounceTimeout]);
+    return (
+        <Select
+            labelInValue
+            filterOption={false}
+            onSearch={debounceFetcher}
+            notFoundContent={fetching ? <Spin size="small" /> : null}
+            {...props}
+            options={options}
+        />
+    );
+}
 
 export default function NewJoboffer() {
-
+    const fetchDepartmentsByName = (departmentName) => {
+        return axios({
+            method: GET,
+            url: `/api/department/queryByName?name=${departmentName}`
+        }).then(({ data: { code, message, data } }) => data.map(item => ({ label: item.name, value: item.id })))
+    }, fetchPositionsByName = (name) => {
+        return axios({
+            method: GET,
+            url: `/api/position/queryByName?name=${name}`
+        }).then(({ data: { code, message, data } }) => data.map(item => ({ label: `${item.name}(${item.level})`, value: item.id })))
+    };
     function addJoboffer(data) {
         console.log(data);
         axios({
             method: POST,
             url: '/api/joboffer/add',
-            data: data
+            data: { ...data, status: 'publish', departmentId: data.department[0].value, positionId: data.position[0].value }
         }).then(response => {
             let code = response.data.code;
             if (code === 0) {
@@ -30,14 +78,53 @@ export default function NewJoboffer() {
             <Form labelCol={{ span: 4 }}
                 wrapperCol={{ span: 16 }}
                 onFinish={addJoboffer}>
-                <Form.Item label={"Resume URL"} name={'resumeUrl'} rules={[
+                <Form.Item label={"Title"} name={'title'} rules={[
                     {
                         required: true,
-                        message: 'Please input resume url',
-                    },
-                    { type: 'url', warningOnly: true }
+                        message: 'Please input title',
+                    }
                 ]}>
                     <Input />
+                </Form.Item>
+                <Form.Item label={"Number"} name={'number'} rules={[
+                    {
+                        required: true,
+                        message: 'Please input number',
+                    }
+                ]}>
+                    <InputNumber />
+                </Form.Item>
+                <Form.Item label={"Due Date"} name={'dueDate'} rules={[
+                    {
+                        required: true,
+                        message: 'Please input Due Date',
+                    }
+                ]}>
+                    <DatePicker placeholder={'Select'} />
+                </Form.Item>
+                <Form.Item label={"Department Name"} name={'department'} rules={[
+                    {
+                        required: true,
+                        message: 'Please input Department Name',
+                    }
+                ]}>
+                    <DebounceSelect
+                        mode="multiple"
+                        placeholder="Select employees by email"
+                        fetchOptions={fetchDepartmentsByName}
+                    />
+                </Form.Item>
+                <Form.Item label={"Position Name"} name={'position'} rules={[
+                    {
+                        required: true,
+                        message: 'Please input Position Name',
+                    }
+                ]}>
+                    <DebounceSelect
+                        mode="multiple"
+                        placeholder="Select positions by name"
+                        fetchOptions={fetchPositionsByName}
+                    />
                 </Form.Item>
                 <Form.Item wrapperCol={{ offset: 4, span: 16 }}>
                     <Button type={'primary'} htmlType="submit">

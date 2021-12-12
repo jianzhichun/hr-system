@@ -20,5 +20,5 @@ public class JobOffer {
     private Long departmentId;
     private Long positionId;
     private String departmentName;
-    private String positonName;
+    private String positionName;
 }
