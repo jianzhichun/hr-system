@@ -45,21 +45,22 @@ create table if not exists  salary
 (
     id            bigint primary key auto_increment not null,
     employee_id   bigint,
-    department_id bigint,
     amount        decimal(26, 6)
 );
 
 create table if not exists  employee
 (
-    id           bigint primary key auto_increment not null,
-    email        varchar(128) unique,
-    password     varchar(128),
-    type         varchar(32),
-    resign_time  date,
-    enrol_time   date,
-    name         varchar(32),
-    gender       varchar(16),
-    address      varchar(128),
-    phone_number varchar(64),
-    position_id  bigint
+    id              bigint primary key auto_increment not null,
+    email           varchar(128) unique,
+    password        varchar(128),
+    type            varchar(32),
+    resign_time     date,
+    enrol_time      date,
+    name            varchar(32),
+    gender          varchar(16),
+    address         varchar(128),
+    phone_number    varchar(64),
+    age             int,
+    position_id     bigint,
+    department_id   bigint
 )

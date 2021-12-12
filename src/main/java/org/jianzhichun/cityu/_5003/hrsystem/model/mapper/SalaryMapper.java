@@ -1,8 +1,11 @@
 package org.jianzhichun.cityu._5003.hrsystem.model.mapper;
 
+import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.Update;
 import org.jianzhichun.cityu._5003.hrsystem.model.Salary;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 
@@ -14,7 +17,12 @@ import java.util.List;
 public interface SalaryMapper {
 
 
-    @Select("select * from salary;")
+    @Insert("insert into salary(employee_id, amount) values(#{employeeId}, #{amount})")
+    void insert(Long employeeId, BigDecimal amount);
+
+    @Select("select s.id, s.employee_id, s.department_id, s.amount, CONCAT(e.name, '(', e.email,  ')') employee_name, d.name department_name from salary s left join department d on e.department_id = d.id left join employee e on s.employee_id = e.id;")
     List<Salary> findAll();
 
+    @Update("update salary set amount = #{amount} where id = #{id}")
+    void update(Long id, BigDecimal amount);
 }

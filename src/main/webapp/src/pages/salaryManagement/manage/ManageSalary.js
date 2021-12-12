@@ -58,7 +58,7 @@ export default function SalaryManagement() {
                 url: '/api/salary/page',
                 data: pagination
             }).then(({ data: { code, message, data} }) => {
-                setData(data.items.map(item => {
+                setData(data.list.map(item => {
                     return {...item, key: item.id};
                 }))
             })

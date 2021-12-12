@@ -1,20 +1,19 @@
 package org.jianzhichun.cityu._5003.hrsystem.controller;
 
 import org.jianzhichun.cityu._5003.hrsystem.model.Employee;
+import org.jianzhichun.cityu._5003.hrsystem.model.mapper.AccountMapper;
 import org.jianzhichun.cityu._5003.hrsystem.model.request.LoginRequest;
 import org.jianzhichun.cityu._5003.hrsystem.model.request.SignUpRequest;
 import org.jianzhichun.cityu._5003.hrsystem.utils.HashUtil;
 import org.jianzhichun.cityu._5003.hrsystem.utils.Response;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.BeanPropertyRowMapper;
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.servlet.http.HttpSession;
+import cn.dev33.satoken.stp.StpUtil;
 
 /**
  * @author Zhang Zao
@@ -24,56 +23,43 @@ import javax.servlet.http.HttpSession;
 @RestController
 @RequestMapping("/api/account")
 public class AccountController {
-
-    @Autowired
-    private HttpSession session;
     
     @Autowired
-    private JdbcTemplate jdbcTemplate;
+    private AccountMapper accountMapper;
 
     @GetMapping("/me")
     public Response<Object> me() {
-        Object user = session.getAttribute("user");
+        Object user = StpUtil.getSession().get("user");
         return user instanceof Employee ? new Response<>(user) : new Response<>(304, "Session expired.");
     }
 
     @GetMapping("/logout")
     public Response<Void> logout() {
-        session.removeAttribute("user");
+        StpUtil.logout();
         return new Response<>();
     }
 
     @PostMapping("/login")
     public Response<Void> login(@RequestBody LoginRequest payLoad) {
-        Employee employee = jdbcTemplate.queryForObject(
-                "select * from employee where email = ?",
-                new BeanPropertyRowMapper<>(Employee.class),
-                payLoad.getEmail()
-        );
-        if (null == employee) {
+        Employee employeeDo = accountMapper.findOneByEmail(payLoad.getEmail());
+        if (null == employeeDo) {
             return new Response<>(404, "Not exist.");
         }
-        if (HashUtil.sha256(payLoad.getPassword()).equals(employee.getPassword())) {
-            session.setAttribute("user", employee);
+        if (HashUtil.sha256(payLoad.getPassword()).equals(employeeDo.getPassword())) {
+            StpUtil.login(employeeDo.getId());
+            StpUtil.getSession().set("user", employeeDo);
             return new Response<>();
         }
         return new Response<>(503, "Invalid email or password.");
     }
 
     @PostMapping("/register")
-    public Response<Void> register(@RequestBody SignUpRequest payLoad) {
-        Long count = jdbcTemplate.queryForObject(
-                "select count(1) from employee where email = ?",
-                Long.class,
-                payLoad.getEmail()
-        );
-        if (null != count && count > 1) {
-            return new Response<>(503, "This email has been taken");
+    public Response<Void> register(@RequestBody SignUpRequest request) {
+        if (accountMapper.selectCountByEmail(request.getEmail()) > 1) {
+            return new Response<>(404, "This email has been taken");
         }
-        jdbcTemplate.update(
-                "insert into employee(name, email, password) values(?, ?, ?)",
-                payLoad.getName(), payLoad.getEmail(), HashUtil.sha256(payLoad.getPassword())
-        );
+
+        accountMapper.insert(request.getName(), request.getEmail(), HashUtil.sha256(request.getPassword()));
         return new Response<>();
     }
 }
