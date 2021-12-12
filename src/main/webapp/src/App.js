@@ -38,7 +38,7 @@ function App() {
     function loadUser() {
         axios({
             method: GET,
-            url: '/api/employee/me'
+            url: '/api/account/me'
         }).then(({ data: { code, message, data} }) => {
             if (code === 0) {
                 setUser(data);

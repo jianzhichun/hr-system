@@ -1,6 +1,7 @@
 package org.jianzhichun.cityu._5003.hrsystem.model;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 import java.util.Date;
 
@@ -9,12 +10,9 @@ import java.util.Date;
  * @version 1.0
  * @date 12/11/2021 10:16 PM
  */
+@EqualsAndHashCode(callSuper = true)
 @Data
-public class Employee {
-
-    private Long id;
-    private String email;
-    private String password;
+public class Employee extends Account {
 
     private String type;
 

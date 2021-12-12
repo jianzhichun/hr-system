@@ -12,7 +12,7 @@ export default function Login(props) {
     function login({ password, email }) {
         axios({
             method: POST,
-            url: '/api/employee/login',
+            url: '/api/account/login',
             data: {
                 email: email,
                 password: password

@@ -17,7 +17,7 @@ export default function SignUp() {
 
         axios({
             method: POST,
-            url: '/api/employee/register',
+            url: '/api/account/register',
             data: {
                 name: name,
                 email: email,

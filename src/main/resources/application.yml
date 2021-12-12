@@ -1,7 +1,3 @@
-mybatis:
-  configuration:
-    map-underscore-to-camel-case: true
-  type-aliases-package: org.jianzhichun.cityu._5003.hrsystem
 spring:
   session:
     timeout: 7200
@@ -25,5 +21,3 @@ spring:
         - classpath:init.sql
       mode: always
 
-
-pagehelper.auto-dialect: true

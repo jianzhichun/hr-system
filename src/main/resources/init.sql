@@ -37,7 +37,8 @@ create table if not exists  position
 (
     id    bigint primary key auto_increment not null,
     name  varchar(128),
-    level varchar(32)
+    level varchar(32),
+    department_id bigint
 );
 
 create table if not exists  salary
