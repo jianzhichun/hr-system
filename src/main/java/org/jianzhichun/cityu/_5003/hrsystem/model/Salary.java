@@ -15,6 +15,7 @@ public class Salary {
 
     private Long id;
     private Long employeeId;
-    private Long DepartmentId;
+    private String employeeName;
+    private String departmentName;
     private BigDecimal amount;
 }

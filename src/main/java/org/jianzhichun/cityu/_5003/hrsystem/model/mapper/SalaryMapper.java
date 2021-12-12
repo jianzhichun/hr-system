@@ -20,7 +20,7 @@ public interface SalaryMapper {
     @Insert("insert into salary(employee_id, amount) values(#{employeeId}, #{amount})")
     void insert(Long employeeId, BigDecimal amount);
 
-    @Select("select s.id, s.employee_id, s.department_id, s.amount, CONCAT(e.name, '(', e.email,  ')') employee_name, d.name department_name from salary s left join department d on e.department_id = d.id left join employee e on s.employee_id = e.id;")
+    @Select("select s.id, s.employee_id, e.department_id, s.amount, CONCAT(e.name, '(', e.email,  ')') employee_name, d.name department_name from salary s left join employee e on s.employee_id = e.id left join department d on e.department_id = d.id")
     List<Salary> findAll();
 
     @Update("update salary set amount = #{amount} where id = #{id}")
