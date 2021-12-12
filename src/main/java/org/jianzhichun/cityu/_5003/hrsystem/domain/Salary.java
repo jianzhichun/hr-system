@@ -1,4 +1,4 @@
-package org.jianzhichun.cityu._5003.hrsystem.dao;
+package org.jianzhichun.cityu._5003.hrsystem.domain;
 
 import lombok.Data;
 
@@ -11,7 +11,7 @@ import java.math.BigDecimal;
  * @date 12/11/2021 10:16 PM
  */
 @Data
-public class SalaryDO {
+public class Salary {
 
     private Long id;
     private Long employeeId;

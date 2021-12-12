@@ -1,4 +1,4 @@
-package org.jianzhichun.cityu._5003.hrsystem.dao;
+package org.jianzhichun.cityu._5003.hrsystem.domain;
 
 import lombok.Data;
 
@@ -10,7 +10,7 @@ import java.util.Date;
  * @date 12/11/2021 10:16 PM
  */
 @Data
-public class EmployeeDO {
+public class Employee {
 
     private Long id;
     private String email;
