@@ -1,11 +1,14 @@
-import {Button, InputNumber, Form, message} from "antd";
+import {Button, DatePicker, Form, Input, message, Select, Spin} from "antd";
+import TextArea from "antd/es/input/TextArea";
+import Radio from "antd/es/radio/radio";
 import axios from "axios";
 import {GET, POST} from "../../../util/string";
-import {useState, useRef, useMemo} from "react";
-import {Select, Spin} from 'antd';
+import {useMemo, useRef, useState} from "react";
 import debounce from 'lodash/debounce';
 
-const DebounceSelect = ({fetchOptions, debounceTimeout = 50, ...props}) => {
+
+
+const DebounceSelect = ({ fetchOptions, debounceTimeout = 50, ...props }) => {
     const [fetching, setFetching] = useState(false);
     const [options, setOptions] = useState([]);
     const fetchRef = useRef(0);
@@ -33,14 +36,16 @@ const DebounceSelect = ({fetchOptions, debounceTimeout = 50, ...props}) => {
             showSearch
             filterOption={false}
             onSearch={debounceFetcher}
-            notFoundContent={fetching ? <Spin size="small"/> : null}
+            notFoundContent={fetching ? <Spin size="small" /> : null}
             {...props}
             options={options}
         />
     );
 }
 
-export default function NewSalary() {
+
+export default function NewAttendance() {
+
     const fetchEmployeesByEmail = (email) => {
         return axios({
             method: GET,
@@ -48,17 +53,18 @@ export default function NewSalary() {
         }).then(({data: {code, message, data}}) => data.map(item => ({label: item.email, value: item.id})))
     };
 
-    function addSalary(data) {
+    function addAttendance(data) {
         console.log(data);
         axios({
             method: POST,
-            url: '/api/salary/add',
-            data: {...data}
+            url: '/api/attendance/add',
+            data: data
         }).then(response => {
             let code = response.data.code;
             if (code === 0) {
                 message.success('Success!');
             } else {
+                message.error(response.data.message);
                 console.log(response);
             }
         }).catch(e => {
@@ -66,13 +72,12 @@ export default function NewSalary() {
         });
     }
 
-
     return (
         <div style={{backgroundColor: '#fff', padding: 24}}>
-            <div className={'bold font-16 m-b-20'}>Add New Salary</div>
+            <div className={'bold font-16 m-b-20'}>Add Attendance</div>
             <Form labelCol={{span: 4}}
                   wrapperCol={{span: 16}}
-                  onFinish={addSalary}>
+                  onFinish={addAttendance}>
                 <Form.Item label={"Employee Email"} name={'employeeId'}
                            rules={[
                                {
@@ -85,18 +90,36 @@ export default function NewSalary() {
                         fetchOptions={fetchEmployeesByEmail}
                     />
                 </Form.Item>
-                <Form.Item label={"Amount"} name={'amount'} rules={[
+
+                <Form.Item label={"Start Date"} name={'start'} rules={[
                     {
                         required: true,
-                        message: 'Please input amount',
+                        message: 'Please input start date',
                     },
                 ]}>
-                    <InputNumber
-                        min="0"
-                        step="0.000001"
-                        stringMode
-                        style={{width: 200}}
-                    />
+                    <DatePicker placeholder={'Select'}/>
+                </Form.Item>
+                <Form.Item label={"End Date"} name={'end'} rules={[
+                    {
+                        required: true,
+                        message: 'Please input end date',
+                    },
+                ]}>
+                    <DatePicker placeholder={'Select'}/>
+                </Form.Item>
+                <Form.Item label={'Type'} name={'type'} rules={[
+                    {
+                        required: true,
+                        message: 'Please input type',
+                    },
+                ]}>
+                    <Radio.Group>
+                        <Radio value={'L'}>Leave</Radio>
+                        <Radio value={'E'}>Evection</Radio>
+                        <Radio value={'O'}>Overtime</Radio>
+                        <Radio value={'D'}>Deferred holidays</Radio>
+                        <Radio value={'S'}>Shut down</Radio>
+                    </Radio.Group>
                 </Form.Item>
                 <Form.Item wrapperCol={{offset: 4, span: 16}}>
                     <Button type={'primary'} htmlType="submit">
