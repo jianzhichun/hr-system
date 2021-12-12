@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { Table, Input, InputNumber, Popconfirm, Form, Typography } from 'antd';
+import { message, Table, Input, InputNumber, Popconfirm, Form, Typography } from 'antd';
 import axios from "axios";
-import {GET} from "../../../util/string";
+import { GET, POST } from "../../../util/string";
 
 
 export default function SalaryManagement() {
@@ -16,7 +16,11 @@ export default function SalaryManagement() {
         children,
         ...restProps
     }) => {
-        const inputNode = inputType === 'number' ? <InputNumber /> : <Input />;
+        const inputNode = inputType === 'number' ? <InputNumber min="0"
+            step="0.000001"
+            stringMode
+            style={{ width: 200 }}
+        /> : <Input />;
         return (
             <td {...restProps}>
                 {editing ? (
@@ -53,21 +57,29 @@ export default function SalaryManagement() {
         [editingKey, setEditingKey] = useState(''),
         fetch = (pagination) => {
             setLoading(true);
-            axios({
+            return axios({
                 method: GET,
-                url: '/api/salary/page',
-                data: pagination
-            }).then(({ data: { code, message, data} }) => {
-                setData(data.list.map(item => {
-                    return {...item, key: item.id};
-                }))
+                url: `/api/salary/page?page=${pagination.current}&size=${pagination.pageSize}`
+            }).then(({ data: { code, message, data } }) => {
+                if (code != 0) {
+                    message.error({ content: message })
+                } else {
+                    setData(data.list.map(item => {
+                        return { ...item, key: item.id };
+                    }));
+                    setPagination({
+                        current: data.pageNum,
+                        pageSize: data.pageSize,
+                        total: data.total
+                    })
+                }
             })
         };
 
     useEffect(() => {
         fetch(pagination)
     }, [])
-    
+
     const isEditing = (record) => record.key === editingKey;
 
     const edit = (record) => {
@@ -75,10 +87,6 @@ export default function SalaryManagement() {
             ...record,
         });
         setEditingKey(record.key);
-    };
-
-    const cancel = () => {
-        setEditingKey('');
     };
 
     const save = async (key) => {
@@ -89,9 +97,20 @@ export default function SalaryManagement() {
 
             if (index > -1) {
                 const item = newData[index];
-                newData.splice(index, 1, { ...item, ...row });
-                setData(newData);
-                setEditingKey('');
+                axios({
+                    method: POST,
+                    url: `/api/salary/update/${key}`,
+                    data: row
+                }).then(({ data: { code, message: msg } }) => {
+                    if (code != 0) {
+                        message.error({ content: msg });
+                    } else {
+                        message.success({ content: "success" })
+                        newData.splice(index, 1, { ...item, ...row });
+                        setData(newData);
+                        setEditingKey('');
+                    }
+                })
             } else {
                 newData.push(row);
                 setData(newData);
@@ -134,7 +153,25 @@ export default function SalaryManagement() {
                         >
                             Save
                         </Typography.Link>
-                        <Popconfirm title="Sure to cancel?" onConfirm={cancel}>
+                        <Typography.Link
+                            onClick={() =>
+                                axios({
+                                    method: POST, url: `/api/salary/delete/${record.key}`
+                                }).then(({ data: { code, message: msg } }) => {
+                                    if (code != 0) {
+                                        message.error({ content: msg })
+                                    } else {
+                                        fetch(pagination).then(() => message.success({ content: "success" }) && setEditingKey(''))
+                                    }
+                                }).catch(err => message.error({ content: err.toJSON().message }))
+                            }
+                            style={{
+                                marginRight: 8,
+                            }}
+                        >
+                            Delete
+                        </Typography.Link>
+                        <Popconfirm title="Sure to cancel?" onConfirm={() => setEditingKey('')}>
                             <a>Cancel</a>
                         </Popconfirm>
                     </span>
@@ -178,7 +215,10 @@ export default function SalaryManagement() {
                         columns={mergedColumns}
                         rowClassName="editable-row"
                         pagination={{
-                            onChange: cancel,
+                            ...pagination,
+                            onChange: page => {
+                                fetch({ ...pagination, current: page }).then(() => setEditingKey(''))
+                            },
                         }}
                     />
                 </Form>

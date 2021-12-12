@@ -25,4 +25,7 @@ public interface SalaryMapper {
 
     @Update("update salary set amount = #{amount} where id = #{id}")
     void update(Long id, BigDecimal amount);
+
+    @Update("delete from salary where id = #{id}")
+    void delete(Long id);
 }

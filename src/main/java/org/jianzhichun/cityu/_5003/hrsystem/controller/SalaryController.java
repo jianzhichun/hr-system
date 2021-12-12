@@ -9,6 +9,7 @@ import com.github.pagehelper.PageInfo;
 import org.jianzhichun.cityu._5003.hrsystem.model.Salary;
 import org.jianzhichun.cityu._5003.hrsystem.model.mapper.SalaryMapper;
 import org.jianzhichun.cityu._5003.hrsystem.model.request.AddSalaryRequest;
+import org.jianzhichun.cityu._5003.hrsystem.model.request.UpdateSalaryRequest;
 import org.jianzhichun.cityu._5003.hrsystem.utils.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -32,9 +33,15 @@ public class SalaryController {
         return new Response<>();
     }
 
+    @PostMapping("/delete/{id}")
+    public Response<Void> delete(@PathVariable Long id) {
+        salaryMapper.delete(id);
+        return new Response<>();
+    }
+
     @PostMapping("/update/{id}")
-    public Response<Void> update(@PathVariable Long id, @RequestBody BigDecimal amount) {
-        salaryMapper.update(id, amount);
+    public Response<Void> update(@PathVariable Long id, @RequestBody UpdateSalaryRequest request) {
+        salaryMapper.update(id, request.getAmount());
         return new Response<>();
     }
 
