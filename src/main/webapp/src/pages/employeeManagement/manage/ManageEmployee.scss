@@ -1,0 +1,47 @@
+.manage-employee {
+  background-color: #fff;
+  padding: 24px;
+
+  .header {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px;
+    font-weight: bold;
+
+    .items {
+      display: flex;
+
+      .name {
+        width: 64px;
+      }
+
+      .email {
+        width: 160px;
+      }
+
+      .age {
+        width: 48px;
+      }
+
+      .enrol {
+        width: 120px;
+      }
+
+      .resign {
+        width: 120px;
+      }
+
+      .contact {
+        width: 120px;
+      }
+
+      .address {
+        width: 200px;
+      }
+
+      .gender {
+        width: 30px;
+      }
+    }
+  }
+}

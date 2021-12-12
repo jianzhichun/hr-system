@@ -53,8 +53,7 @@ public class EmployeeController {
 
         final PageUtil.StartAndLength startAndLength = PageUtil.getStartAndLength(request.getPage(), request.getSize(), total);
 
-        final List<Employee> employees = employeeMapper.selectByPage(startAndLength.getStart(), startAndLength.getLength());
-
+        List<Employee> employees = employeeMapper.selectByPage(startAndLength.getStart(), startAndLength.getLength());
         return new Response<>(employees);
     }
 }
