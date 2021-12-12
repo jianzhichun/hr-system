@@ -1,14 +1,19 @@
 package org.jianzhichun.cityu._5003.hrsystem.controller;
 
 import lombok.extern.slf4j.Slf4j;
+import org.jianzhichun.cityu._5003.hrsystem.model.Employee;
 import org.jianzhichun.cityu._5003.hrsystem.model.request.AddEmployeeRequest;
+import org.jianzhichun.cityu._5003.hrsystem.model.request.PageRequest;
+import org.jianzhichun.cityu._5003.hrsystem.utils.PageUtil;
 import org.jianzhichun.cityu._5003.hrsystem.utils.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpSession;
 import java.sql.Timestamp;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
 
 /**
  * @author Zhang Zao
@@ -19,9 +24,6 @@ import java.sql.Timestamp;
 @Slf4j
 @RequestMapping("/api/employee")
 public class EmployeeController {
-
-    @Autowired
-    private HttpSession session;
     
     @Autowired
     private JdbcTemplate jdbcTemplate;
@@ -43,5 +45,19 @@ public class EmployeeController {
                 "insert into employee(name, email, enrol_time, phone_number, address, gender) values (?, ?, ?, ?, ?, ?)",
                 request.getName(), request.getEmail(), new Timestamp(request.getEnrol().getTime()), request.getContact(), request.getAddress(), request.getGender());
         return new Response<>();
+    }
+
+
+    @PostMapping("/list")
+    public Response<List<Employee>> listEmployees(@RequestBody PageRequest request) {
+        int count = jdbcTemplate.queryForObject("select count(1) from employee", Integer.class);
+        if (count == 0) {
+            return new Response<>(Collections.emptyList());
+        }
+
+        final PageUtil.StartAndLength startAndLength = PageUtil.getStartAndLength(request.getPage(), request.getSize(), count);
+        int start = startAndLength.getStart(), length = startAndLength.getLength();
+        return null;
+
     }
 }
