@@ -26,7 +26,7 @@ public class SalaryController {
     @Autowired
     private SalaryMapper salaryMapper;
     
-    @PostMapping("/insert")
+    @PostMapping("/add")
     public Response<Void> insert(@RequestBody AddSalaryRequest request) {
         salaryMapper.insert(request.getEmployeeId(), request.getAmount());
         return new Response<>();

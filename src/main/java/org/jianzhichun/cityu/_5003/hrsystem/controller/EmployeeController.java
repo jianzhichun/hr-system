@@ -1,29 +1,20 @@
 package org.jianzhichun.cityu._5003.hrsystem.controller;
 
-import lombok.extern.slf4j.Slf4j;
 import org.jianzhichun.cityu._5003.hrsystem.model.Employee;
 import org.jianzhichun.cityu._5003.hrsystem.model.mapper.AccountMapper;
 import org.jianzhichun.cityu._5003.hrsystem.model.mapper.EmployeeMapper;
 import org.jianzhichun.cityu._5003.hrsystem.model.request.AddEmployeeRequest;
 import org.jianzhichun.cityu._5003.hrsystem.model.request.PageRequest;
-import org.jianzhichun.cityu._5003.hrsystem.utils.PageUtil;
 import org.jianzhichun.cityu._5003.hrsystem.utils.Response;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.web.bind.annotation.*;
 
-import java.sql.Timestamp;
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
-import java.util.Map;
-
-import com.github.pagehelper.PageHelper;
 
 /**
  * @author Zhang Zao
  * @version 1.0
- * @date 12/11/2021 10:20 PM
+ * @date 12/11/2021 10:20 PM+
  */
 @Slf4j
 @RestController
@@ -34,6 +25,11 @@ public class EmployeeController {
     private EmployeeMapper employeeMapper;
     @Autowired
     private AccountMapper accountMapper;
+
+    @GetMapping("/queryByEmail")
+    public Response<List<Employee>> findEmployeeByEmail(String email) {
+        return new Response<>(employeeMapper.findByEmail(email));
+    }
 
     @PostMapping("/add")
     public Response<Void> add(@RequestBody AddEmployeeRequest request) {
