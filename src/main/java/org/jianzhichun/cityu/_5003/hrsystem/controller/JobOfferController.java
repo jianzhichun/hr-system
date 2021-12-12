@@ -1,11 +1,12 @@
 package org.jianzhichun.cityu._5003.hrsystem.controller;
 
 import java.math.BigDecimal;
-
+import java.util.List;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 
+import org.jianzhichun.cityu._5003.hrsystem.model.JobOffer;
 import org.jianzhichun.cityu._5003.hrsystem.model.Salary;
 import org.jianzhichun.cityu._5003.hrsystem.model.mapper.JobOfferMapper;
 import org.jianzhichun.cityu._5003.hrsystem.model.mapper.SalaryMapper;
@@ -30,6 +31,11 @@ public class JobOfferController {
     @Autowired
     private JobOfferMapper jobOfferMapper;
     
+    @GetMapping("/queryByName")
+    public Response<List<JobOffer>> findEmployeeByEmail(String name) {
+        return new Response<>(jobOfferMapper.findByName(name));
+    }
+
     @PostMapping("/add")
     public Response<Void> insert(@RequestBody AddJobOfferRequest request) {
         jobOfferMapper.insert(request.getTitle(), request.getNumber(), request.getDueDate(), request.getStatus(), request.getDepartmentId(), request.getPositionId());
@@ -49,7 +55,7 @@ public class JobOfferController {
     }
 
     @GetMapping("/page")
-    public Response<PageInfo<Salary>> page(@RequestParam(name = "page", defaultValue = "1") int page,
+    public Response<PageInfo<JobOffer>> page(@RequestParam(name = "page", defaultValue = "1") int page,
             @RequestParam(name = "size", defaultValue = "10") int size) {
         return new Response<>(PageHelper.startPage(page, size).doSelectPageInfo(() -> jobOfferMapper.findAll()));
     }

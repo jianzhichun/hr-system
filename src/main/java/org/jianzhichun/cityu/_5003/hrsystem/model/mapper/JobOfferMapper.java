@@ -18,6 +18,9 @@ public interface JobOfferMapper {
     @Insert("insert into job_offer(title, number, due_date, status, department_id, position_id) values(#{titile}, #{number}, #{dueDate}, #{status}, #{departmentId}, #{positionId})")
     void insert(String title, Long number, Date dueDate, String status, Long departmentId, Long positionId);
 
+    @Select("select * from job_offer where title like concat('%', #{name}, '%') limit 5")
+    List<JobOffer> findByName(String name);
+
     @Select("select s.*, CONCAT(e.name, '(', e.email,  ')') employee_name, d.name department_name, p.name positionName from job_offer s, department d, position p where s.department_id = d.id and s.position_id = p.id")
     List<JobOffer> findAll();
 

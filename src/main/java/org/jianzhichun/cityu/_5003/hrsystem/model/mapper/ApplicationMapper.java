@@ -27,7 +27,7 @@ public interface ApplicationMapper {
     @Update("delete from application where id = #{id}")
     void delete(Long id);
 
-    @Select("select * from application")
+    @Select("select a.*, o.title jobTitle from application a left join job_offer o on a.job_offer_id = o.id")
     List<Application> findAll();
 
 }

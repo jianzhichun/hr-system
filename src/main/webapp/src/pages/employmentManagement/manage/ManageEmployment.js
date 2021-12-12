@@ -1,10 +1,53 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState, useRef, useMemo, useEffect } from 'react';
 import { message, Table, Input, InputNumber, Popconfirm, Form, Typography } from 'antd';
 import axios from "axios";
 import { GET, POST } from "../../../util/string";
+import { Select, Spin } from 'antd';
+import debounce from 'lodash/debounce';
 
+const DebounceSelect = ({ fetchOptions, debounceTimeout = 800, ...props }) => {
+    const [fetching, setFetching] = useState(false);
+    const [options, setOptions] = useState([]);
+    const fetchRef = useRef(0);
+    const debounceFetcher = useMemo(() => {
+        const loadOptions = (value) => {
+            fetchRef.current += 1;
+            const fetchId = fetchRef.current;
+            setOptions([]);
+            setFetching(true);
+            fetchOptions(value).then((newOptions) => {
+                if (fetchId !== fetchRef.current) {
+                    // for fetch callback order
+                    return;
+                }
+
+                setOptions(newOptions);
+                setFetching(false);
+            });
+        };
+
+        return debounce(loadOptions, debounceTimeout);
+    }, [fetchOptions, debounceTimeout]);
+    return (
+        <Select
+            labelInValue
+            filterOption={false}
+            onSearch={debounceFetcher}
+            notFoundContent={fetching ? <Spin size="small" /> : null}
+            {...props}
+            options={options}
+        />
+    );
+}
 
 export default function EmploymentManagement() {
+
+    const fetchJobOffersByName = (jobName) => {
+        return axios({
+            method: GET,
+            url: `/api/joboffer/queryByName?name=${jobName}`
+        }).then(({ data: { code, message, data } }) => data.map(item => ({ label: item.name, value: item.id })))
+    };
 
     const EditableCell = ({
         editing,
@@ -16,11 +59,18 @@ export default function EmploymentManagement() {
         children,
         ...restProps
     }) => {
-        const inputNode = inputType === 'number' ? <InputNumber min="0"
+        let inputNode = inputType === 'number' ? <InputNumber min="0"
             step="0.000001"
             stringMode
             style={{ width: 200 }}
         /> : <Input />;
+        if (dataIndex === 'jobTitle') {
+            inputNode = <DebounceSelect
+                mode="multiple"
+                placeholder="Select job offer by name"
+                fetchOptions={fetchJobOffersByName}
+            />;
+        }
         return (
             <td {...restProps}>
                 {editing ? (
@@ -126,12 +176,18 @@ export default function EmploymentManagement() {
             width: '25%'
         },
         {
+            title: 'Job',
+            dataIndex: 'jobOfferId',
+            width: '25%',
+            editable: true
+        },
+        {
             title: 'Resume URL',
             dataIndex: 'resumeUrl',
             width: '15%',
             editable: true,
             render: (_, record) => {
-                return <a onClick={()=>window.open(record['resumeUrl'])}>{record['resumeUrl']}</a>
+                return <a onClick={() => window.open(record['resumeUrl'])}>{record['resumeUrl']}</a>
             }
         },
         {

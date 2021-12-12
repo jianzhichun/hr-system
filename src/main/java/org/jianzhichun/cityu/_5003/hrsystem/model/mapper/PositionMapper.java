@@ -17,4 +17,7 @@ public interface PositionMapper {
     @Select("select * from position;")
     List<Position> findAll();
 
+    @Select("select * from postion where name like concat('%', #{name}, '%') limit 5")
+    List<Position> findByName(String name);
+
 }

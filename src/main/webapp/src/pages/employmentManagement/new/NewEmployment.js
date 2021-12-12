@@ -1,8 +1,52 @@
 import { Button, Form, Input, message } from "antd";
 import axios from "axios";
-import { POST } from "../../../util/string";
+import { GET, POST } from "../../../util/string";
+import { useState, useRef, useMemo } from "react";
+import { Select, Spin } from 'antd';
+import debounce from 'lodash/debounce';
+
+const DebounceSelect = ({ fetchOptions, debounceTimeout = 800, ...props }) => {
+    const [fetching, setFetching] = useState(false);
+    const [options, setOptions] = useState([]);
+    const fetchRef = useRef(0);
+    const debounceFetcher = useMemo(() => {
+        const loadOptions = (value) => {
+            fetchRef.current += 1;
+            const fetchId = fetchRef.current;
+            setOptions([]);
+            setFetching(true);
+            fetchOptions(value).then((newOptions) => {
+                if (fetchId !== fetchRef.current) {
+                    // for fetch callback order
+                    return;
+                }
+
+                setOptions(newOptions);
+                setFetching(false);
+            });
+        };
+
+        return debounce(loadOptions, debounceTimeout);
+    }, [fetchOptions, debounceTimeout]);
+    return (
+        <Select
+            labelInValue
+            filterOption={false}
+            onSearch={debounceFetcher}
+            notFoundContent={fetching ? <Spin size="small" /> : null}
+            {...props}
+            options={options}
+        />
+    );
+}
 
 export default function NewEmployment() {
+    const fetchJobOffersByName = (jobName) => {
+        return axios({
+            method: GET,
+            url: `/api/joboffer/queryByName?name=${jobName}`
+        }).then(({data: {code, message, data}}) => data.map(item => ({label: item.name, value: item.id})))
+    };
 
     function addEmployment(data) {
         console.log(data);
@@ -30,6 +74,19 @@ export default function NewEmployment() {
             <Form labelCol={{ span: 4 }}
                 wrapperCol={{ span: 16 }}
                 onFinish={addEmployment}>
+                <Form.Item label={"Job"} name={'jobOfferId'}
+                    rules={[
+                        {
+                            required: true,
+                            message: 'Please input job name',
+                        },
+                    ]}>
+                    <DebounceSelect
+                        mode="multiple"
+                        placeholder="Select job offer by name"
+                        fetchOptions={fetchJobOffersByName}
+                    />
+                </Form.Item>
                 <Form.Item label={"Resume URL"} name={'resumeUrl'} rules={[
                     {
                         required: true,

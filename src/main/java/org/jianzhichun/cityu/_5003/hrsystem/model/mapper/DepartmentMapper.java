@@ -17,4 +17,7 @@ public interface DepartmentMapper {
     @Select("select * from department;")
     List<Department> findAll();
 
+    @Select("select * from department where name like concat('%', #{name}, '%') limit 5")
+    List<Department> findByName(String name);
+
 }

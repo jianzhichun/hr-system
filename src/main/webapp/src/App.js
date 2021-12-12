@@ -119,17 +119,17 @@ function App() {
                                     </Link>
                                 </Menu.Item>
                                 <Menu.Item key="3" icon={<RedEnvelopeOutlined/>}>
-                                    <Link to={'/app/salary/'}>
+                                    <Link to={'/app/salary/add'}>
                                         Salary
                                     </Link>
                                 </Menu.Item>
                                 <Menu.Item key="4" icon={<CodepenOutlined/>}>
-                                    <Link to={'/app/jobOffer/'}>
+                                    <Link to={'/app/jobOffer/add'}>
                                         Job Offer
                                     </Link>
                                 </Menu.Item>
                                 <Menu.Item key="5" icon={<UsergroupAddOutlined/>}>
-                                    <Link to={'/app/employment/'}>
+                                    <Link to={'/app/employment/add'}>
                                         Employment
                                     </Link>
                                 </Menu.Item>

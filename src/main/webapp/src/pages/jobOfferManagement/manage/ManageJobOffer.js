@@ -126,6 +126,11 @@ export default function JobOfferManagement() {
             width: '25%'
         },
         {
+            title: 'Job',
+            dataIndex: 'jobTitle',
+            width: '25%'
+        },
+        {
             title: 'Resume URL',
             dataIndex: 'resumeUrl',
             width: '15%',
