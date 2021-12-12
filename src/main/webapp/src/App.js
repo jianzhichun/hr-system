@@ -47,6 +47,8 @@ function App() {
             } else {
                 window.location.hash = '/login'
             }
+        }).catch(e => {
+            window.location.hash = '/login';
         })
     }
 

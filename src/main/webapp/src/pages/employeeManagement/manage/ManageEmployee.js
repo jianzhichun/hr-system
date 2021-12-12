@@ -1,9 +1,15 @@
-import {useEffect} from "react";
+import {useEffect, useState} from "react";
 import axios from "axios";
 import {POST} from "../../../util/string";
 import {SIZE} from "../../../config";
+import Employee from "./employee/Employee";
+
+
 
 export default function ManageEmployee() {
+
+    const [data, setData] = useState([]);
+    const columns = ["Name", "Age", ]
 
     useEffect(() => {
         axios({
@@ -12,6 +18,10 @@ export default function ManageEmployee() {
             data: {
                 page: 1,
                 size: SIZE
+            }
+        }).then(response => {
+            if (response.data.code === 0) {
+                setData(response.data.data);
             }
         })
     }, []);
@@ -22,7 +32,10 @@ export default function ManageEmployee() {
                 Employee Management
             </div>
 
-
+            <div>
+                {data.map((item, key) =>
+                <Employee item={item} key={key}/>)}
+            </div>
         </div>
     );
 }
