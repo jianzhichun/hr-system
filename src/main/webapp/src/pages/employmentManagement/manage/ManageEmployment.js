@@ -5,7 +5,7 @@ import { GET, POST } from "../../../util/string";
 import { Select, Spin } from 'antd';
 import debounce from 'lodash/debounce';
 
-const DebounceSelect = ({ fetchOptions, debounceTimeout = 800, ...props }) => {
+const DebounceSelect = ({ fetchOptions, debounceTimeout = 50, ...props }) => {
     const [fetching, setFetching] = useState(false);
     const [options, setOptions] = useState([]);
     const fetchRef = useRef(0);
@@ -30,6 +30,7 @@ const DebounceSelect = ({ fetchOptions, debounceTimeout = 800, ...props }) => {
     }, [fetchOptions, debounceTimeout]);
     return (
         <Select
+            showSearch
             labelInValue
             filterOption={false}
             onSearch={debounceFetcher}
@@ -66,7 +67,6 @@ export default function EmploymentManagement() {
         /> : <Input />;
         if (dataIndex === 'jobOfferId') {
             inputNode = <DebounceSelect
-                mode="multiple"
                 value={{
                     label: record['jobTitle'],
                     value: record['jobOfferId']

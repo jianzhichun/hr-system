@@ -5,7 +5,7 @@ import { useState, useRef, useMemo } from "react";
 import { Select, Spin } from 'antd';
 import debounce from 'lodash/debounce';
 
-const DebounceSelect = ({ fetchOptions, debounceTimeout = 800, ...props }) => {
+const DebounceSelect = ({ fetchOptions, debounceTimeout = 50, ...props }) => {
     const [fetching, setFetching] = useState(false);
     const [options, setOptions] = useState([]);
     const fetchRef = useRef(0);
@@ -30,6 +30,7 @@ const DebounceSelect = ({ fetchOptions, debounceTimeout = 800, ...props }) => {
     }, [fetchOptions, debounceTimeout]);
     return (
         <Select
+            showSearch
             labelInValue
             filterOption={false}
             onSearch={debounceFetcher}
@@ -109,7 +110,6 @@ export default function NewJoboffer() {
                     }
                 ]}>
                     <DebounceSelect
-                        mode="multiple"
                         placeholder="Select employees by email"
                         fetchOptions={fetchDepartmentsByName}
                     />
@@ -121,7 +121,6 @@ export default function NewJoboffer() {
                     }
                 ]}>
                     <DebounceSelect
-                        mode="multiple"
                         placeholder="Select positions by name"
                         fetchOptions={fetchPositionsByName}
                     />

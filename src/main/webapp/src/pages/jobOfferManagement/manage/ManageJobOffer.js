@@ -6,7 +6,7 @@ import { Select, Spin } from 'antd';
 import debounce from 'lodash/debounce';
 import moment from 'moment';
 
-const DebounceSelect = ({ fetchOptions, debounceTimeout = 800, ...props }) => {
+const DebounceSelect = ({ fetchOptions, debounceTimeout = 50, ...props }) => {
     const [fetching, setFetching] = useState(false);
     const [options, setOptions] = useState([]);
     const fetchRef = useRef(0);
