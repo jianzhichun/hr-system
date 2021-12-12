@@ -1,11 +1,12 @@
 package org.jianzhichun.cityu._5003.hrsystem.controller;
 
-import com.github.pagehelper.PageHelper;
-import com.github.pagehelper.PageInfo;
-import org.jianzhichun.cityu._5003.hrsystem.dao.ApplicationDO;
-import org.jianzhichun.cityu._5003.hrsystem.dao.ApplicationMapper;
+
+import org.jianzhichun.cityu._5003.hrsystem.domain.Application;
+import org.jianzhichun.cityu._5003.hrsystem.utils.Page;
 import org.jianzhichun.cityu._5003.hrsystem.utils.Response;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.BeanPropertyRowMapper;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -21,12 +22,20 @@ import org.springframework.web.bind.annotation.RestController;
 public class ApplicationController {
 
     @Autowired
-    private ApplicationMapper applicationMapper;
+    private JdbcTemplate jdbcTemplate;
 
     @GetMapping("/page")
-    public Response<PageInfo<ApplicationDO>> page(@RequestParam(name = "page", defaultValue = "1") int page,
-                                                  @RequestParam(name = "size", defaultValue = "10") int size) {
-        return new Response<>(PageHelper.startPage(page, size).doSelectPageInfo(() -> applicationMapper.findAll()));
+    public Response<Page<Application>> page(@RequestParam(name = "page", defaultValue = "1") long page,
+                                            @RequestParam(name = "size", defaultValue = "10") int size) {
+        return new Response<>(new Page<>(
+                jdbcTemplate.queryForObject("select count(1) from application", Long.class),
+                page, size,
+                jdbcTemplate.query(
+                        "select * from application limit ? offset ?",
+                        new BeanPropertyRowMapper<>(Application.class),
+                        size, Math.max(0, page - 1) * size
+                )
+        ));
     }
 
 }

@@ -1,6 +1,5 @@
 package org.jianzhichun.cityu._5003.hrsystem;
 
-import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
@@ -9,7 +8,6 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
  * @version 1.0
  * @date 12/11/2021 10:16 PM
  */
-@MapperScan("org.jianzhichun.cityu._5003.hrsystem")
 @SpringBootApplication
 public class HrSystemApplication {
 
