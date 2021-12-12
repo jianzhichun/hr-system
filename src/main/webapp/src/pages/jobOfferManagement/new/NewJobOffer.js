@@ -31,7 +31,6 @@ const DebounceSelect = ({ fetchOptions, debounceTimeout = 50, ...props }) => {
     return (
         <Select
             showSearch
-            labelInValue
             filterOption={false}
             onSearch={debounceFetcher}
             notFoundContent={fetching ? <Spin size="small" /> : null}
@@ -58,7 +57,7 @@ export default function NewJoboffer() {
         axios({
             method: POST,
             url: '/api/joboffer/add',
-            data: { ...data, status: 'publish', departmentId: data.department[0].value, positionId: data.position[0].value }
+            data: { ...data, status: 'publish'}
         }).then(response => {
             let code = response.data.code;
             if (code === 0) {
@@ -103,7 +102,7 @@ export default function NewJoboffer() {
                 ]}>
                     <DatePicker placeholder={'Select'} />
                 </Form.Item>
-                <Form.Item label={"Department Name"} name={'department'} rules={[
+                <Form.Item label={"Department Name"} name={'departmentId'} rules={[
                     {
                         required: true,
                         message: 'Please input Department Name',
@@ -114,7 +113,7 @@ export default function NewJoboffer() {
                         fetchOptions={fetchDepartmentsByName}
                     />
                 </Form.Item>
-                <Form.Item label={"Position Name"} name={'position'} rules={[
+                <Form.Item label={"Position Name"} name={'positionId'} rules={[
                     {
                         required: true,
                         message: 'Please input Position Name',

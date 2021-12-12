@@ -5,9 +5,9 @@ import { GET, POST } from "../../../util/string";
 import { Select, Spin } from 'antd';
 import debounce from 'lodash/debounce';
 
-const DebounceSelect = ({ fetchOptions, debounceTimeout = 50, ...props }) => {
+const DebounceSelect = ({ fetchOptions, firstOptions, debounceTimeout = 50, ...props }) => {
     const [fetching, setFetching] = useState(false);
-    const [options, setOptions] = useState([]);
+    const [options, setOptions] = useState(firstOptions);
     const fetchRef = useRef(0);
     const debounceFetcher = useMemo(() => {
         const loadOptions = (value) => {
@@ -31,7 +31,6 @@ const DebounceSelect = ({ fetchOptions, debounceTimeout = 50, ...props }) => {
     return (
         <Select
             showSearch
-            labelInValue
             filterOption={false}
             onSearch={debounceFetcher}
             notFoundContent={fetching ? <Spin size="small" /> : null}
@@ -47,7 +46,7 @@ export default function EmploymentManagement() {
         return axios({
             method: GET,
             url: `/api/joboffer/queryByName?name=${jobName}`
-        }).then(({ data: { code, message, data } }) => data.map(item => ({ label: item.name, value: item.id })))
+        }).then(({ data: { code, message, data } }) => data.map(item => ({ label: item.title, value: item.id })))
     };
 
     const EditableCell = ({
@@ -60,19 +59,12 @@ export default function EmploymentManagement() {
         children,
         ...restProps
     }) => {
-        let inputNode = inputType === 'number' ? <InputNumber min="0"
-            step="0.000001"
-            stringMode
-            style={{ width: 200 }}
-        /> : <Input />;
+        let inputNode =  <Input />;
         if (dataIndex === 'jobOfferId') {
             inputNode = <DebounceSelect
-                value={{
-                    label: record['jobTitle'],
-                    value: record['jobOfferId']
-                }}
                 placeholder="Select job offer by name"
                 fetchOptions={fetchJobOffersByName}
+                firstOptions={[{label: record.jobTitle, value: record.jobOfferId}]}
             />;
         }
         return (
@@ -161,6 +153,7 @@ export default function EmploymentManagement() {
                         newData.splice(index, 1, { ...item, ...row });
                         setData(newData);
                         setEditingKey('');
+                        fetch(pagination);
                     }
                 })
             } else {

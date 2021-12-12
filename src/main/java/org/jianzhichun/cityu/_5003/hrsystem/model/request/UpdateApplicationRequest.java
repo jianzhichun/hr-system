@@ -4,6 +4,7 @@ import lombok.Data;
 
 @Data
 public class UpdateApplicationRequest {
-    
+
+    private Long jobOfferId;
     private String resumeUrl, status;
 }

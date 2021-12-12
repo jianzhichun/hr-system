@@ -18,11 +18,11 @@ import java.util.List;
 public interface ApplicationMapper {
 
 
-    @Insert("insert into application(date, resume_url, status) values(#{date}, #{resumeUrl}, 'under review')")
-    void insert(Date date, String resumeUrl);
+    @Insert("insert into application(date, job_offer_id, resume_url, status) values(#{date}, #{jobOfferId}, #{resumeUrl}, 'under review')")
+    void insert(Date date, Long jobOfferId, String resumeUrl);
 
-    @Update("update application set resume_url=#{resumeUrl}, status=#{status} where id = #{id}")
-    void update(Long id, String resumeUrl, String status);
+    @Update("update application set job_offer_id=#{jobOfferId}, resume_url=#{resumeUrl}, status=#{status} where id = #{id}")
+    void update(Long id, Long jobOfferId, String resumeUrl, String status);
 
     @Update("delete from application where id = #{id}")
     void delete(Long id);

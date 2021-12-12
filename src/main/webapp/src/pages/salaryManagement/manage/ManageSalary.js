@@ -107,6 +107,7 @@ export default function SalaryManagement() {
                         newData.splice(index, 1, { ...item, ...row });
                         setData(newData);
                         setEditingKey('');
+                        fetch(pagination);
                     }
                 })
             } else {

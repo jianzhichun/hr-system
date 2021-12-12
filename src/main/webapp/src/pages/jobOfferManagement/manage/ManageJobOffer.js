@@ -6,9 +6,9 @@ import { Select, Spin } from 'antd';
 import debounce from 'lodash/debounce';
 import moment from 'moment';
 
-const DebounceSelect = ({ fetchOptions, debounceTimeout = 50, ...props }) => {
+const DebounceSelect = ({ fetchOptions, firstOptions, debounceTimeout = 50, ...props }) => {
     const [fetching, setFetching] = useState(false);
-    const [options, setOptions] = useState([]);
+    const [options, setOptions] = useState(firstOptions);
     const fetchRef = useRef(0);
     const debounceFetcher = useMemo(() => {
         const loadOptions = (value) => {
@@ -31,7 +31,7 @@ const DebounceSelect = ({ fetchOptions, debounceTimeout = 50, ...props }) => {
     }, [fetchOptions, debounceTimeout]);
     return (
         <Select
-            labelInValue
+            showSearch
             filterOption={false}
             onSearch={debounceFetcher}
             notFoundContent={fetching ? <Spin size="small" /> : null}
@@ -68,19 +68,15 @@ export default function EmploymentJobOffer() {
         let inputNode;
         if (dataIndex === 'departmentId') {
             inputNode = <DebounceSelect
-                mode="multiple"
                 placeholder="Select department by name"
                 fetchOptions={fetchDepartmentsByName}
+                firstOptions={[{label: record.departmentName, value: record.departmentId}]}
             />;
         } else if (dataIndex === 'positionId') {
             inputNode = <DebounceSelect
-                value={[{
-                    label: record.positionName,
-                    value: record.positionId
-                }]}
-                mode="multiple"
                 placeholder="Select position by name"
                 fetchOptions={fetchPositionsByName}
+                firstOptions={[{label: record.positionName, value: record.positionId}]}
             />;
         } else if (dataIndex === 'dueDate') {
             inputNode = <DatePicker />
@@ -166,7 +162,7 @@ export default function EmploymentJobOffer() {
                 axios({
                     method: POST,
                     url: `/api/joboffer/update/${key}`,
-                    data: {...row, departmentId: row.department[0].value, positionId: row.position[0].value}
+                    data: row
                 }).then(({ data: { code, message: msg } }) => {
                     if (code !== 0) {
                         message.error({ content: msg });
@@ -175,6 +171,7 @@ export default function EmploymentJobOffer() {
                         newData.splice(index, 1, { ...item, ...row });
                         setData(newData);
                         setEditingKey('');
+                        fetch(pagination);
                     }
                 })
             } else {
@@ -211,7 +208,7 @@ export default function EmploymentJobOffer() {
         },
         {
             title: 'Department',
-            dataIndex: 'department',
+            dataIndex: 'departmentId',
             width: '15%',
             editable: true,
             render: (_, record) => {
@@ -220,7 +217,7 @@ export default function EmploymentJobOffer() {
         },
         {
             title: 'Position',
-            dataIndex: 'position',
+            dataIndex: 'positionId',
             width: '15%',
             editable: true,
             render: (_, record) => {

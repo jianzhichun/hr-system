@@ -31,7 +31,6 @@ const DebounceSelect = ({ fetchOptions, debounceTimeout = 50, ...props }) => {
     return (
         <Select
             showSearch
-            labelInValue
             filterOption={false}
             onSearch={debounceFetcher}
             notFoundContent={fetching ? <Spin size="small" /> : null}
@@ -46,7 +45,7 @@ export default function NewEmployment() {
         return axios({
             method: GET,
             url: `/api/joboffer/queryByName?name=${jobName}`
-        }).then(({data: {code, message, data}}) => data.map(item => ({label: item.name, value: item.id})))
+        }).then(({data: {code, message, data}}) => data.map(item => ({label: item.title, value: item.id})))
     };
 
     function addEmployment(data) {

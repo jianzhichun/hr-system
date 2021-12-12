@@ -29,7 +29,7 @@ public class EmploymentController {
     
     @PostMapping("/add")
     public Response<Void> insert(@RequestBody AddApplicationRequest request) {
-        applicationMapper.insert(new Date(), request.getResumeUrl());
+        applicationMapper.insert(new Date(), request.getJobOfferId(), request.getResumeUrl());
         return new Response<>();
     }
 
@@ -41,7 +41,7 @@ public class EmploymentController {
 
     @PostMapping("/update/{id}")
     public Response<Void> update(@PathVariable Long id, @RequestBody UpdateApplicationRequest request) {
-        applicationMapper.update(id, request.getResumeUrl(), request.getStatus());
+        applicationMapper.update(id, request.getJobOfferId(), request.getResumeUrl(), request.getStatus());
         return new Response<>();
     }
 

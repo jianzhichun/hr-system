@@ -53,7 +53,7 @@ export default function NewSalary() {
         axios({
             method: POST,
             url: '/api/salary/add',
-            data: {...data, employeeId: data.email[0].value}
+            data: {...data}
         }).then(response => {
             let code = response.data.code;
             if (code === 0) {
@@ -74,7 +74,7 @@ export default function NewSalary() {
             <Form labelCol={{ span: 4 }}
                 wrapperCol={{ span: 16 }}
                 onFinish={addSalary}>
-                <Form.Item label={"Email"} name={'email'}
+                <Form.Item label={"Employee Email"} name={'employeeId'}
                     rules={[
                         {
                             required: true,
