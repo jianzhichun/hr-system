@@ -5,19 +5,13 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import lombok.extern.slf4j.Slf4j;
 import org.jianzhichun.cityu._5003.hrsystem.model.Attendance;
-import org.jianzhichun.cityu._5003.hrsystem.model.Employee;
-import org.jianzhichun.cityu._5003.hrsystem.model.mapper.AccountMapper;
+import org.jianzhichun.cityu._5003.hrsystem.model.request.UpdateAttendanceRequest;
 import org.jianzhichun.cityu._5003.hrsystem.model.mapper.AttendanceMapper;
 import org.jianzhichun.cityu._5003.hrsystem.model.mapper.EmployeeMapper;
 import org.jianzhichun.cityu._5003.hrsystem.model.request.AddAttendanceRequest;
-import org.jianzhichun.cityu._5003.hrsystem.model.request.AddEmployeeRequest;
-import org.jianzhichun.cityu._5003.hrsystem.model.request.PageRequest;
-import org.jianzhichun.cityu._5003.hrsystem.utils.PageUtil;
 import org.jianzhichun.cityu._5003.hrsystem.utils.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 /**
  * @author Zefeng Wang
@@ -43,8 +37,20 @@ public class AttendanceController {
         return new Response<>();
     }
 
+    @PostMapping("/update/{id}")
+    public Response<Void> update(@PathVariable Long id, @RequestBody UpdateAttendanceRequest request) {
+        attendanceMapper.update(id, request.getStart(), request.getEnd(), request.getType(), request.getStatus());
+        return new Response<>();
+    }
+
     @GetMapping("/page")
     public Response<PageInfo<Attendance>> page(@RequestParam("page") int page, @RequestParam("size") int size) {
         return new Response<>(PageHelper.startPage(page, size).doSelectPageInfo(() -> attendanceMapper.findAll()));
+    }
+
+    @DeleteMapping("/delete/{id}")
+    public Response<Void> delete(@PathVariable Long id) {
+        attendanceMapper.delete(id);
+        return new Response<>();
     }
 }

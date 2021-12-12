@@ -1,17 +1,13 @@
 package org.jianzhichun.cityu._5003.hrsystem.model.mapper;
 
-import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.*;
 import org.jianzhichun.cityu._5003.hrsystem.model.Attendance;
 
 import java.util.Date;
 import java.util.List;
 
 /**
- * @author Zhang Zao
- * @version 1.0
- * @date 12/11/2021 10:16 PM
+ * @author Zefeng Wang
  */
 
 @Mapper
@@ -22,4 +18,10 @@ public interface AttendanceMapper {
 
     @Insert("insert into attendance(employee_id, start_date, end_date, type) values (#{eid}, #{start}, #{end}, #{type})")
     void insert(int eid, Date start, Date end, String type);
+
+    @Update("update attendance set start_date = #{start}, end_date = #{end}, type = #{type}, status = #{status} where id = #{id}")
+    void update(Long id, Date start, Date end, String type, String status);
+
+    @Delete("delete from attendance where id = #{id} limit 1")
+    void delete(Long id);
 }
