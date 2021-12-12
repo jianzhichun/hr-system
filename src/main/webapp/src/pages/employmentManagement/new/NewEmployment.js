@@ -35,6 +35,7 @@ export default function NewEmployment() {
                         required: true,
                         message: 'Please input resume url',
                     },
+                    { type: 'url', warningOnly: true }
                 ]}>
                     <Input />
                 </Form.Item>

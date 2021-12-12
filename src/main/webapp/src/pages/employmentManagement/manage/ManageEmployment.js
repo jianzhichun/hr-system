@@ -130,6 +130,9 @@ export default function EmploymentManagement() {
             dataIndex: 'resumeUrl',
             width: '15%',
             editable: true,
+            render: (_, record) => {
+                return <a onClick={()=>window.open(record['resumeUrl'])}>{record['resumeUrl']}</a>
+            }
         },
         {
             title: 'Status',
