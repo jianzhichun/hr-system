@@ -1,19 +1,14 @@
 package org.jianzhichun.cityu._5003.hrsystem.controller;
 
-import java.math.BigDecimal;
 import java.util.List;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 
 import org.jianzhichun.cityu._5003.hrsystem.model.JobOffer;
-import org.jianzhichun.cityu._5003.hrsystem.model.Salary;
 import org.jianzhichun.cityu._5003.hrsystem.model.mapper.JobOfferMapper;
-import org.jianzhichun.cityu._5003.hrsystem.model.mapper.SalaryMapper;
 import org.jianzhichun.cityu._5003.hrsystem.model.request.AddJobOfferRequest;
-import org.jianzhichun.cityu._5003.hrsystem.model.request.AddSalaryRequest;
 import org.jianzhichun.cityu._5003.hrsystem.model.request.UpdateJobOfferRequest;
-import org.jianzhichun.cityu._5003.hrsystem.model.request.UpdateSalaryRequest;
 import org.jianzhichun.cityu._5003.hrsystem.utils.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
