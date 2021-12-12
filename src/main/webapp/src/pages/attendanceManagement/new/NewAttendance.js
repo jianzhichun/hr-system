@@ -1,5 +1,4 @@
-import {Button, DatePicker, Form, Input, message, Select, Spin} from "antd";
-import TextArea from "antd/es/input/TextArea";
+import {Button, DatePicker, Form, message, Select, Spin} from "antd";
 import Radio from "antd/es/radio/radio";
 import axios from "axios";
 import {GET, POST} from "../../../util/string";
@@ -78,7 +77,7 @@ export default function NewAttendance() {
             <Form labelCol={{span: 4}}
                   wrapperCol={{span: 16}}
                   onFinish={addAttendance}>
-                <Form.Item label={"Employee Email"} name={'employeeId'}
+                <Form.Item label={"Employee Email"} name={'eid'}
                            rules={[
                                {
                                    required: true,

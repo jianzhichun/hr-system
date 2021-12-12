@@ -17,10 +17,12 @@ public interface EmployeeMapper {
     @Select("select * from employee where email like concat('%', #{email}, '%') limit 5")
     List<Employee> findByEmail(String email);
 
-
     @Select("select count(*) from employee")
     int selectCount();
 
     @Select("select * from employee limit #{start}, #{length}")
     List<Employee> selectByPage(int start, int length);
+
+    @Select("select count(*) from employee where id = #{id}")
+    int selectCountById(int id);
 }
