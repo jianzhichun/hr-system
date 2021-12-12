@@ -6,8 +6,13 @@ import {HashRouter, Link} from "react-router-dom";
 import {Route, Switch} from "react-router";
 import NewEmployee from "./new/NewEmployee";
 import ManageEmployee from "./manage/ManageEmployee";
+import {useEffect} from "react";
 
-export default function EmployeeManagement() {
+export default function EmployeeManagement(props) {
+
+    useEffect(() => {
+        props.loadUser();
+    }, []);
 
     return (
         <Layout style={{minHeight: 400}}>
@@ -31,6 +36,11 @@ export default function EmployeeManagement() {
                 <Content className={'site-layout-background'} style={{padding: '24px'}}>
                     <HashRouter>
                         <Switch>
+                            <Route path={'/app/employee/'} exact={true}>
+                                <div>
+                                    
+                                </div>
+                            </Route>
                             <Route path={'/app/employee/add'}>
                                 <NewEmployee/>
                             </Route>

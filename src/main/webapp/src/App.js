@@ -10,14 +10,16 @@ import SignUp from "./pages/signUp/SignUp";
 import EmployeeManagement from "./pages/employeeManagement/EmployeeManagement";
 import Layout, {Header} from "antd/es/layout/layout";
 import {useEffect, useState} from "react";
-import {Menu} from "antd";
+import {Dropdown, Menu} from "antd";
 import {RedEnvelopeOutlined, SmileTwoTone, TableOutlined, TeamOutlined, UsergroupAddOutlined} from "@ant-design/icons";
+import {DownOutlined} from '@ant-design/icons';
 import AttendanceManagement from "./pages/attendanceManagement/AttendanceManagement";
 import SalaryManagement from "./pages/salaryManagement/SalaryManagement";
 import EmploymentManagement from "./pages/employmentManagement/EmploymentManagement";
 import Home from "./pages/home/Home";
 import axios from "axios";
 import {GET} from "./util/string";
+import Profile from "./pages/profile/Profile";
 
 
 function App() {
@@ -39,7 +41,7 @@ function App() {
         axios({
             method: GET,
             url: '/api/account/me'
-        }).then(({ data: { code, message, data} }) => {
+        }).then(({data: {code, message, data}}) => {
             if (code === 0) {
                 setUser(data);
             } else {
@@ -48,10 +50,39 @@ function App() {
         })
     }
 
+    function logout() {
+        axios({
+            method: GET,
+            url: '/api/account/logout'
+        }).then(() => {
+            setUser(null);
+            window.location.hash = '/login';
+        })
+    }
+
     useEffect(() => {
         document.title = 'Welcome to HR system';
-        loadUser();
+        axios({
+            method: GET,
+            url: '/api/account/me'
+        }).then(({data: {code, message, data}}) => {
+            if (code === 0) {
+                setUser(data);
+            }
+        })
     }, []);
+
+    const menu = (
+        <Menu>
+            <Menu.Item>
+                <Link to={'/app/profile/'}>Profile</Link>
+            </Menu.Item>
+            <Menu.Divider />
+            <Menu.Item>
+                <span className={'red-text'} onClick={logout}>Log out</span>
+            </Menu.Item>
+        </Menu>
+    );
 
     return (
         <div className="App">
@@ -97,38 +128,44 @@ function App() {
                             </Menu>
 
                             {user !== null &&
-                            <div className={'account'}>
-                                {user.name}
-                            </div>}
+                            <Dropdown overlay={menu} trigger={['click']}>
+                                <a className="ant-dropdown-link" onClick={e => e.preventDefault()}>
+                                    {user.name} <DownOutlined/>
+                                </a>
+                            </Dropdown>}
                         </Header>
 
-                        <Layout>
-                            <Switch>
-                                <Route exact={true} path={'/app/'}>
-                                    <div style={APP_HOME_STYLE}>
-                                        <SmileTwoTone style={{fontSize: 48}} twoToneColor="rgb(228, 200, 100)"/>
-                                        <div className={'bold font-24'}>
-                                            Welcome!
-                                        </div>
-                                        <span>
+
+                            <Layout>
+                                <Switch>
+                                    <Route exact={true} path={'/app/'}>
+                                        <div style={APP_HOME_STYLE}>
+                                            <SmileTwoTone style={{fontSize: 48}} twoToneColor="rgb(228, 200, 100)"/>
+                                            <div className={'bold font-24'}>
+                                                Welcome!
+                                            </div>
+                                            <span>
                                             Click on the navigation bar to get started.
                                         </span>
-                                    </div>
-                                </Route>
-                                <Route exact={true} path={'/app/employee/*'}>
-                                    <EmployeeManagement/>
-                                </Route>
-                                <Route exact={true} path={'/app/attendance/*'}>
-                                    <AttendanceManagement/>
-                                </Route>
-                                <Route exact={true} path={'/app/salary/*'}>
-                                    <SalaryManagement/>
-                                </Route>
-                                <Route exact={true} path={'/app/employment/*'}>
-                                    <EmploymentManagement/>
-                                </Route>
-                            </Switch>
-                        </Layout>
+                                        </div>
+                                    </Route>
+                                    <Route exact={true} path={'/app/employee/*'}>
+                                        <EmployeeManagement loadUser={loadUser}/>
+                                    </Route>
+                                    <Route exact={true} path={'/app/attendance/*'}>
+                                        <AttendanceManagement/>
+                                    </Route>
+                                    <Route exact={true} path={'/app/salary/*'}>
+                                        <SalaryManagement/>
+                                    </Route>
+                                    <Route exact={true} path={'/app/employment/*'}>
+                                        <EmploymentManagement/>
+                                    </Route>
+                                    <Route exact={true} path={'/app/profile/*'}>
+                                        <Profile/>
+                                    </Route>
+                                </Switch>
+                            </Layout>
                     </Layout>
 
 
@@ -137,7 +174,7 @@ function App() {
 
 
         </div>
-    );
+);
 }
 
 export default App;
