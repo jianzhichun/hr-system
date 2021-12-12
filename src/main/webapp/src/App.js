@@ -11,11 +11,12 @@ import EmployeeManagement from "./pages/employeeManagement/EmployeeManagement";
 import Layout, {Header} from "antd/es/layout/layout";
 import {useEffect, useState} from "react";
 import {Dropdown, Menu} from "antd";
-import {RedEnvelopeOutlined, SmileTwoTone, TableOutlined, TeamOutlined, UsergroupAddOutlined} from "@ant-design/icons";
+import {RedEnvelopeOutlined, SmileTwoTone, TableOutlined, TeamOutlined, UsergroupAddOutlined, CodepenOutlined} from "@ant-design/icons";
 import {DownOutlined} from '@ant-design/icons';
 import AttendanceManagement from "./pages/attendanceManagement/AttendanceManagement";
 import SalaryManagement from "./pages/salaryManagement/SalaryManagement";
 import EmploymentManagement from "./pages/employmentManagement/EmploymentManagement";
+import JobOfferManagement from "./pages/jobOfferManagement/JobOfferManagement";
 import Home from "./pages/home/Home";
 import axios from "axios";
 import {GET} from "./util/string";
@@ -122,7 +123,12 @@ function App() {
                                         Salary
                                     </Link>
                                 </Menu.Item>
-                                <Menu.Item key="4" icon={<UsergroupAddOutlined/>}>
+                                <Menu.Item key="4" icon={<CodepenOutlined/>}>
+                                    <Link to={'/app/jobOffer/'}>
+                                        Job Offer
+                                    </Link>
+                                </Menu.Item>
+                                <Menu.Item key="5" icon={<UsergroupAddOutlined/>}>
                                     <Link to={'/app/employment/'}>
                                         Employment
                                     </Link>
@@ -159,6 +165,9 @@ function App() {
                                     </Route>
                                     <Route exact={true} path={'/app/salary/*'}>
                                         <SalaryManagement loadUser={loadUser}/>
+                                    </Route>
+                                    <Route exact={true} path={'/app/joboffer/*'}>
+                                        <JobOfferManagement loadUser={loadUser}/>
                                     </Route>
                                     <Route exact={true} path={'/app/employment/*'}>
                                         <EmploymentManagement loadUser={loadUser}/>
