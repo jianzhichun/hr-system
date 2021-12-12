@@ -11,7 +11,7 @@ import EmployeeManagement from "./pages/employeeManagement/EmployeeManagement";
 import Layout, {Header} from "antd/es/layout/layout";
 import {useEffect, useState} from "react";
 import {Menu} from "antd";
-import {RedEnvelopeOutlined, TableOutlined, TeamOutlined, UsergroupAddOutlined} from "@ant-design/icons";
+import {RedEnvelopeOutlined, SmileTwoTone, TableOutlined, TeamOutlined, UsergroupAddOutlined} from "@ant-design/icons";
 import AttendanceManagement from "./pages/attendanceManagement/AttendanceManagement";
 import SalaryManagement from "./pages/salaryManagement/SalaryManagement";
 import EmploymentManagement from "./pages/employmentManagement/EmploymentManagement";
@@ -20,7 +20,18 @@ import Home from "./pages/home/Home";
 
 function App() {
 
-    const [user, setUser] = useState({name: 'Ross'});  // set to null when in production
+    const [user, setUser] = useState(null);  // set to null when in production
+
+    const APP_HOME_STYLE = {
+        width: '100%',
+        backgroundColor: '#fff',
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'center',
+        padding: 24,
+        height: 400
+    }
 
     useEffect(() => {
         document.title = 'Welcome to HR system';
@@ -44,27 +55,27 @@ function App() {
                 <Route path={'/app'}>
                     <Layout>
                         <Header>
-                            <Menu defaultSelectedKeys={['1']}
-                                  theme={'dark'}
+                            <Menu theme={'dark'}
+                                  style={{width: 800}}
                                   mode={'horizontal'}>
                                 <Menu.Item key="1" icon={<TeamOutlined/>}>
                                     <Link to={'/app/employee/'}>
-                                        员工管理
+                                        Employees
                                     </Link>
                                 </Menu.Item>
                                 <Menu.Item key="2" icon={<TableOutlined/>}>
                                     <Link to={'/app/attendance/'}>
-                                        考勤管理
+                                        Attendance
                                     </Link>
                                 </Menu.Item>
                                 <Menu.Item key="3" icon={<RedEnvelopeOutlined/>}>
                                     <Link to={'/app/salary/'}>
-                                        薪资管理
+                                        Salary
                                     </Link>
                                 </Menu.Item>
                                 <Menu.Item key="4" icon={<UsergroupAddOutlined/>}>
                                     <Link to={'/app/employment/'}>
-                                        招聘管理
+                                        Employment
                                     </Link>
                                 </Menu.Item>
                             </Menu>
@@ -77,6 +88,17 @@ function App() {
 
                         <Layout>
                             <Switch>
+                                <Route exact={true} path={'/app/'}>
+                                    <div style={APP_HOME_STYLE}>
+                                        <SmileTwoTone style={{fontSize: 48}} twoToneColor="rgb(228, 200, 100)"/>
+                                        <div className={'bold font-24'}>
+                                            Welcome!
+                                        </div>
+                                        <span>
+                                            Click on the navigation bar to get started.
+                                        </span>
+                                    </div>
+                                </Route>
                                 <Route exact={true} path={'/app/employee/*'}>
                                     <EmployeeManagement/>
                                 </Route>
