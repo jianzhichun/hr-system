@@ -2,7 +2,7 @@ import './SignUp.scss';
 import {Modal, Form, Space, Input, Button} from "antd";
 import {Link} from "react-router-dom";
 import axios from "axios";
-import {POST} from "../../string";
+import {POST} from "../../util/string";
 
 export default function SignUp() {
 

@@ -2,7 +2,7 @@ import './Login.scss';
 import { Modal, Checkbox, Input, Button, Form } from "antd";
 import { Link } from "react-router-dom";
 import axios from "axios";
-import { POST } from "../../string";
+import { POST } from "../../util/string";
 
 export default function Login() {
 
