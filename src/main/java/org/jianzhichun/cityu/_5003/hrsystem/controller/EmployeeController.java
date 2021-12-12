@@ -8,6 +8,9 @@ import org.jianzhichun.cityu._5003.hrsystem.model.request.PageRequest;
 import org.jianzhichun.cityu._5003.hrsystem.utils.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import cn.dev33.satoken.annotation.SaCheckLogin;
+
 import org.jianzhichun.cityu._5003.hrsystem.utils.PageUtil;
 
 import lombok.extern.slf4j.Slf4j;
@@ -19,6 +22,7 @@ import java.util.List;
  * @version 1.0
  * @date 12/11/2021 10:20 PM+
  */
+@SaCheckLogin
 @Slf4j
 @RestController
 @RequestMapping("/api/employee")

@@ -17,6 +17,9 @@ public class GlobalExceptionHandler {
 	@ExceptionHandler(java.lang.Exception.class)
 	public Response<String> handle(Exception e){
 		log.error(e.toString());
+		if (e instanceof cn.dev33.satoken.exception.NotLoginException) {
+			return new Response<>(304, "Session expired.");
+		}
 		return new Response<>(503, e.getMessage());
 	}
 
