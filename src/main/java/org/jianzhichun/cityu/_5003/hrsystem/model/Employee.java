@@ -24,7 +24,7 @@ public class Employee extends Account {
     private String address;
     private String phoneNumber;
 
-    private Integer age;
+    private Date birthday;
     private Long positionId;
     private Long departmentId;
 

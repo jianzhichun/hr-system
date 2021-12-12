@@ -3,6 +3,7 @@ package org.jianzhichun.cityu._5003.hrsystem.model.mapper;
 import java.util.Date;
 import java.util.List;
 
+import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
@@ -25,4 +26,10 @@ public interface EmployeeMapper {
 
     @Select("select count(*) from employee where id = #{id}")
     int selectCountById(int id);
+
+    @Select("select * from employee")
+    List<Employee> findAll();
+
+    @Delete("delete from employee where id = #{id} limit 1")
+    void delete(Long id);
 }
