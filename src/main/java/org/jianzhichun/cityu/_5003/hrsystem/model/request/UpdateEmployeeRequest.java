@@ -9,7 +9,7 @@ import java.util.Date;
  */
 
 @Data
-public class AddEmployeeRequest {
+public class UpdateEmployeeRequest {
     private String name, email, contact, address, gender;
-    private Date enrol, birthday;
+    private Date enrol, resign, birthday;
 }

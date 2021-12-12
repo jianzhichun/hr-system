@@ -59,6 +59,14 @@ export default function NewEmployee() {
                 ]}>
                     <DatePicker placeholder={'Select'}/>
                 </Form.Item>
+                <Form.Item label={"Birthday"} name={'birthday'} rules={[
+                    {
+                        required: true,
+                        message: 'Please input birthday',
+                    },
+                ]}>
+                    <DatePicker placeholder={'Select'}/>
+                </Form.Item>
                 <Form.Item label={"Contact"} name={'contact'} rules={[
                     {
                         required: true,

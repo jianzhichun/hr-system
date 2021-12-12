@@ -4,8 +4,6 @@ import {Layout, Menu} from "antd";
 import {HashRouter, Link} from "react-router-dom";
 import {Content} from "antd/es/layout/layout";
 import {Route, Switch} from "react-router";
-import NewEmployment from "../employmentManagement/new/NewEmployment";
-import ManageEmployment from "../employmentManagement/manage/ManageEmployment";
 import NewAttendance from "./new/NewAttendance";
 import ManageAttendance from "./manage/ManageAttendance";
 

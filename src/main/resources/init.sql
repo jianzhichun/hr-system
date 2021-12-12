@@ -53,7 +53,7 @@ create table if not exists employee (
     gender varchar(16),
     address varchar(128),
     phone_number varchar(64),
-    age int,
+    birthday timestamp,
     position_id bigint,
     department_id bigint
 )

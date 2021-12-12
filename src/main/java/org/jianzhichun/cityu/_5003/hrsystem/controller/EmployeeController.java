@@ -1,17 +1,18 @@
 package org.jianzhichun.cityu._5003.hrsystem.controller;
 
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
+import org.jianzhichun.cityu._5003.hrsystem.model.Attendance;
 import org.jianzhichun.cityu._5003.hrsystem.model.Employee;
+import org.jianzhichun.cityu._5003.hrsystem.model.request.UpdateEmployeeRequest;
 import org.jianzhichun.cityu._5003.hrsystem.model.mapper.AccountMapper;
 import org.jianzhichun.cityu._5003.hrsystem.model.mapper.EmployeeMapper;
 import org.jianzhichun.cityu._5003.hrsystem.model.request.AddEmployeeRequest;
-import org.jianzhichun.cityu._5003.hrsystem.model.request.PageRequest;
 import org.jianzhichun.cityu._5003.hrsystem.utils.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import cn.dev33.satoken.annotation.SaCheckLogin;
-
-import org.jianzhichun.cityu._5003.hrsystem.utils.PageUtil;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -45,18 +46,35 @@ public class EmployeeController {
         }
         log.info(request.toString());
 
-        employeeMapper.insert(request.getName(), request.getEmail(), request.getEnrol(), request.getContact(), request.getAddress(), request.getGender());
+        employeeMapper.insert(request.getName(), request.getEmail(), request.getEnrol(), request.getBirthday(),  request.getContact(), request.getAddress(), request.getGender());
         return new Response<>();
     }
 
 
-    @PostMapping("/list")
-    public Response<List<Employee>> listEmployees(@RequestBody PageRequest request) {
-        int total = employeeMapper.selectCount();
-
-        final PageUtil.StartAndLength startAndLength = PageUtil.getStartAndLength(request.getPage(), request.getSize(), total);
-
-        List<Employee> employees = employeeMapper.selectByPage(startAndLength.getStart(), startAndLength.getLength());
-        return new Response<>(employees);
-    }
+//    @PostMapping("/list")
+//    public Response<List<Employee>> listEmployees(@RequestBody PageRequest request) {
+//        int total = employeeMapper.selectCount();
+//
+//        final PageUtil.StartAndLength startAndLength = PageUtil.getStartAndLength(request.getPage(), request.getSize(), total);
+//
+//        List<Employee> employees = employeeMapper.selectByPage(startAndLength.getStart(), startAndLength.getLength());
+//        return new Response<>(employees);
+//    }
+//
+//    @PostMapping("/update/{id}")
+//    public Response<Void> update(@PathVariable Long id, @RequestBody UpdateEmployeeRequest request) {
+//        employeeMapper.update(id, request.getStart(), request.getEnd(), request.getType(), request.getStatus());
+//        return new Response<>();
+//    }
+//
+//    @GetMapping("/page")
+//    public Response<PageInfo<Attendance>> page(@RequestParam("page") int page, @RequestParam("size") int size) {
+//        return new Response<>(PageHelper.startPage(page, size).doSelectPageInfo(() -> attendanceMapper.findAll()));
+//    }
+//
+//    @DeleteMapping("/delete/{id}")
+//    public Response<Void> delete(@PathVariable Long id) {
+//        attendanceMapper.delete(id);
+//        return new Response<>();
+//    }
 }

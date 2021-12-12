@@ -1,7 +1,7 @@
 import React, { useState, useRef, useMemo, useEffect } from 'react';
 import { message, Table, Input, InputNumber, Popconfirm, Form, Typography } from 'antd';
 import axios from "axios";
-import { GET, POST } from "../../../util/string";
+import {DELETE, GET, POST} from "../../../util/string";
 import { Select, Spin } from 'antd';
 import debounce from 'lodash/debounce';
 
@@ -60,7 +60,7 @@ export default function ManageAttendance() {
         ...restProps
     }) => {
         let inputNode =  <Input />;
-        if (dataIndex === 'jobOfferId') {
+        if (dataIndex === 'attendanceId') {
             inputNode = <DebounceSelect
                 placeholder="Select job offer by name"
                 fetchOptions={fetchJobOffersByName}
@@ -143,7 +143,7 @@ export default function ManageAttendance() {
                 const item = newData[index];
                 axios({
                     method: POST,
-                    url: `/api/employment/update/${key}`,
+                    url: `/api/attendance/update/${key}`,
                     data: row
                 }).then(({ data: { code, message: msg } }) => {
                     if (code !== 0) {
@@ -215,7 +215,7 @@ export default function ManageAttendance() {
                         <Typography.Link
                             onClick={() =>
                                 axios({
-                                    method: POST, url: `/api/employment/delete/${record.key}`
+                                    method: DELETE, url: `/api/attendance/delete/${record.key}`
                                 }).then(({ data: { code, message: msg } }) => {
                                     if (code !== 0) {
                                         message.error({ content: msg })
