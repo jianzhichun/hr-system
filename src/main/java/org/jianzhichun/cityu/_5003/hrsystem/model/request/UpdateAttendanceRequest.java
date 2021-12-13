@@ -11,6 +11,6 @@ import java.util.Date;
 @Data
 public class UpdateAttendanceRequest {
     private int eid;
-    private String type, status;
-    private Date start, end;
+    private String type;
+    private Date startDate, endDate;
 }

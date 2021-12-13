@@ -195,7 +195,7 @@ export default function ManageAttendance() {
         {
             title: 'Start Time',
             dataIndex: 'startDate',
-            width: '15%',
+            width: '20%',
             editable: true,
             render: (_, record) => {
                 return <>{record.startDate.format("YYYY-MM-DD")}</>
@@ -204,18 +204,12 @@ export default function ManageAttendance() {
         {
             title: 'End Time',
             dataIndex: 'endDate',
-            width: '15%',
+            width: '20%',
             editable: true,
             render: (_, record) => {
                 return <>{record.endDate.format("YYYY-MM-DD")}</>
             }
         },
-        // {
-        //     title: 'Status',
-        //     dataIndex: 'status',
-        //     width: '10%',
-        //     editable: true,
-        // },
         {
             title: 'Type',
             dataIndex: 'type',

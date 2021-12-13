@@ -40,7 +40,7 @@ public class AttendanceController {
 
     @PostMapping("/update/{id}")
     public Response<Void> update(@PathVariable Long id, @RequestBody UpdateAttendanceRequest request) {
-        attendanceMapper.update(id, request.getStart(), request.getEnd(), request.getType(), request.getStatus());
+        attendanceMapper.update(id, request.getStartDate(), request.getEndDate(), request.getType());
         return new Response<>();
     }
 
