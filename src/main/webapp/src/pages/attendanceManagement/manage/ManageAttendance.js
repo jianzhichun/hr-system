@@ -1,11 +1,13 @@
-import React, { useState, useRef, useMemo, useEffect } from 'react';
-import { message, Table, Input, InputNumber, Popconfirm, Form, Typography } from 'antd';
+import React, {useState, useRef, useMemo, useEffect} from 'react';
+import {message, Table, Input, InputNumber, Popconfirm, Form, Typography, DatePicker} from 'antd';
 import axios from "axios";
 import {DELETE, GET, POST} from "../../../util/string";
-import { Select, Spin } from 'antd';
+import {Select, Spin} from 'antd';
 import debounce from 'lodash/debounce';
+import moment from "moment";
+import {Option} from "antd/es/mentions";
 
-const DebounceSelect = ({ fetchOptions, firstOptions, debounceTimeout = 50, ...props }) => {
+const DebounceSelect = ({fetchOptions, firstOptions, debounceTimeout = 50, ...props}) => {
     const [fetching, setFetching] = useState(false);
     const [options, setOptions] = useState(firstOptions);
     const fetchRef = useRef(0);
@@ -33,7 +35,7 @@ const DebounceSelect = ({ fetchOptions, firstOptions, debounceTimeout = 50, ...p
             showSearch
             filterOption={false}
             onSearch={debounceFetcher}
-            notFoundContent={fetching ? <Spin size="small" /> : null}
+            notFoundContent={fetching ? <Spin size="small"/> : null}
             {...props}
             options={options}
         />
@@ -46,26 +48,39 @@ export default function ManageAttendance() {
         return axios({
             method: GET,
             url: `/api/joboffer/queryByName?name=${jobName}`
-        }).then(({ data: { code, message, data } }) => data.map(item => ({ label: item.title, value: item.id })))
+        }).then(({data: {code, message, data}}) => data.map(item => ({label: item.title, value: item.id})))
     };
 
     const EditableCell = ({
-        editing,
-        dataIndex,
-        title,
-        inputType,
-        record,
-        index,
-        children,
-        ...restProps
-    }) => {
-        let inputNode =  <Input />;
+                              editing,
+                              dataIndex,
+                              title,
+                              inputType,
+                              record,
+                              index,
+                              children,
+                              ...restProps
+                          }) => {
+        let inputNode = <Input/>;
         if (dataIndex === 'attendanceId') {
             inputNode = <DebounceSelect
                 placeholder="Select job offer by name"
                 fetchOptions={fetchJobOffersByName}
                 firstOptions={[{label: record.jobTitle, value: record.jobOfferId}]}
             />;
+        } else if (dataIndex === 'startDate') {
+            inputNode = <DatePicker/>;
+        } else if (dataIndex === 'endDate') {
+            inputNode = <DatePicker/>;
+        } else if (dataIndex === 'type') {
+            inputNode =
+                <Select defaultValue={'L'}>
+                    <Option value={'L'}>Leave</Option>
+                    <Option value={'E'}>Evection</Option>
+                    <Option value={'O'}>Overtime</Option>
+                    <Option value={'D'}>Deferred holidays</Option>
+                    <Option value={'S'}>Shut down</Option>
+                </Select>
         }
         return (
             <td {...restProps}>
@@ -104,18 +119,23 @@ export default function ManageAttendance() {
             return axios({
                 method: GET,
                 url: `/api/attendance/page?page=${pagination.current}&size=${pagination.pageSize}`
-            }).then(({ data: { code, message, data } }) => {
+            }).then(({data: {code, message, data}}) => {
                 if (code !== 0) {
-                    message.error({ content: message })
+                    message.error({content: message})
                 } else {
                     setData(data.list.map(item => {
-                        return { ...item, key: item.id };
+                        return {
+                            ...item,
+                            key: item.id,
+                            startDate: moment(item.startDate),
+                            endDate: moment(item.endDate)
+                        };
                     }));
                     setPagination({
                         current: data.pageNum,
                         pageSize: data.pageSize,
                         total: data.total
-                    })
+                    });
                 }
             })
         };
@@ -145,12 +165,12 @@ export default function ManageAttendance() {
                     method: POST,
                     url: `/api/attendance/update/${key}`,
                     data: row
-                }).then(({ data: { code, message: msg } }) => {
+                }).then(({data: {code, message: msg}}) => {
                     if (code !== 0) {
-                        message.error({ content: msg });
+                        message.error({content: msg});
                     } else {
-                        message.success({ content: "success" })
-                        newData.splice(index, 1, { ...item, ...row });
+                        message.success({content: "success"})
+                        newData.splice(index, 1, {...item, ...row});
                         setData(newData);
                         setEditingKey('');
                         fetch(pagination);
@@ -177,25 +197,33 @@ export default function ManageAttendance() {
             dataIndex: 'startDate',
             width: '15%',
             editable: true,
+            render: (_, record) => {
+                return <>{record.startDate.format("YYYY-MM-DD")}</>
+            }
         },
         {
             title: 'End Time',
             dataIndex: 'endDate',
             width: '15%',
             editable: true,
-
+            render: (_, record) => {
+                return <>{record.endDate.format("YYYY-MM-DD")}</>
+            }
         },
-        {
-            title: 'Status',
-            dataIndex: 'status',
-            width: '10%',
-            editable: true,
-        },
+        // {
+        //     title: 'Status',
+        //     dataIndex: 'status',
+        //     width: '10%',
+        //     editable: true,
+        // },
         {
             title: 'Type',
             dataIndex: 'type',
-            width: '10%',
+            width: '20%',
             editable: true,
+            render: (_, record) => {
+                return <>{formatType(record.type)}</>
+            }
         },
         {
             title: 'operation',
@@ -216,13 +244,13 @@ export default function ManageAttendance() {
                             onClick={() =>
                                 axios({
                                     method: DELETE, url: `/api/attendance/delete/${record.key}`
-                                }).then(({ data: { code, message: msg } }) => {
+                                }).then(({data: {code, message: msg}}) => {
                                     if (code !== 0) {
-                                        message.error({ content: msg })
+                                        message.error({content: msg})
                                     } else {
-                                        fetch(pagination).then(() => message.success({ content: "success" }) && setEditingKey(''))
+                                        fetch(pagination).then(() => message.success({content: "success"}) && setEditingKey(''))
                                     }
-                                }).catch(err => message.error({ content: err.toJSON().message }))
+                                }).catch(err => message.error({content: err.toJSON().message}))
                             }
                             style={{
                                 marginRight: 8,
@@ -260,7 +288,7 @@ export default function ManageAttendance() {
     });
 
     return (
-        <div style={{ backgroundColor: '#fff', padding: 24 }}>
+        <div style={{backgroundColor: '#fff', padding: 24}}>
             <div className={'bold font-16 m-b-10'}>
                 <Form form={form} component={false}>
                     <Table
@@ -276,7 +304,7 @@ export default function ManageAttendance() {
                         pagination={{
                             ...pagination,
                             onChange: page => {
-                                fetch({ ...pagination, current: page }).then(() => setEditingKey(''))
+                                fetch({...pagination, current: page}).then(() => setEditingKey(''))
                             },
                         }}
                     />
@@ -284,4 +312,21 @@ export default function ManageAttendance() {
             </div>
         </div>
     );
+}
+
+function formatType(T) {
+    switch (T) {
+        case 'L':
+            return 'Leave';
+        case 'E':
+            return 'Evection';
+        case 'O':
+            return 'Overtime';
+        case 'D':
+            return 'Deferred holidays';
+        case 'S':
+            return 'Shut down';
+    }
+
+
 }

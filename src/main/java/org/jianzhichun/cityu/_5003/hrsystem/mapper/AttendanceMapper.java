@@ -15,7 +15,7 @@ public interface AttendanceMapper {
     @Select("select * from attendance")
     List<Attendance> findAll();
 
-    @Select("select A.id, E.id as employee_id, A.start_date, A.end_date, E.email, A.status, A.type from attendance A, employee E where A.employee_id = E.id")
+    @Select("select A.id, E.id as employee_id, A.start_date, A.end_date, E.email, A.type from attendance A, employee E where A.employee_id = E.id")
     List<AttendanceGetOutDTO> findAllWithEmail();
 
     @Insert("insert into attendance(employee_id, start_date, end_date, type) values (#{eid}, #{start}, #{end}, #{type})")
