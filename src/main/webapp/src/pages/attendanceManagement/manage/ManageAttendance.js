@@ -174,13 +174,13 @@ export default function ManageAttendance() {
         },
         {
             title: 'Start Time',
-            dataIndex: 'start',
+            dataIndex: 'startDate',
             width: '15%',
             editable: true,
         },
         {
             title: 'End Time',
-            dataIndex: 'end',
+            dataIndex: 'endDate',
             width: '15%',
             editable: true,
 

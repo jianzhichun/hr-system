@@ -4,6 +4,7 @@ import cn.dev33.satoken.annotation.SaCheckLogin;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import lombok.extern.slf4j.Slf4j;
+import org.jianzhichun.cityu._5003.hrsystem.model.bo.AttendanceGetOutDTO;
 import org.jianzhichun.cityu._5003.hrsystem.model.po.Attendance;
 import org.jianzhichun.cityu._5003.hrsystem.model.request.UpdateAttendanceRequest;
 import org.jianzhichun.cityu._5003.hrsystem.mapper.AttendanceMapper;
@@ -44,8 +45,8 @@ public class AttendanceController {
     }
 
     @GetMapping("/page")
-    public Response<PageInfo<Attendance>> page(@RequestParam("page") int page, @RequestParam("size") int size) {
-        return new Response<>(PageHelper.startPage(page, size).doSelectPageInfo(() -> attendanceMapper.findAll()));
+    public Response<PageInfo<AttendanceGetOutDTO>> page(@RequestParam("page") int page, @RequestParam("size") int size) {
+        return new Response<>(PageHelper.startPage(page, size).doSelectPageInfo(() -> attendanceMapper.findAllWithEmail()));
     }
 
     @DeleteMapping("/delete/{id}")
