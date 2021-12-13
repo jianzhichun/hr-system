@@ -6,8 +6,13 @@ import {Content} from "antd/es/layout/layout";
 import {Route, Switch} from "react-router";
 import NewAttendance from "./new/NewAttendance";
 import ManageAttendance from "./manage/ManageAttendance";
+import {useEffect} from "react";
 
-export default function AttendanceManagement () {
+export default function AttendanceManagement (props) {
+
+    useEffect(() => {
+        props.loadUser();
+    }, []);
 
     return (
         <Layout style={{minHeight: 400}}>

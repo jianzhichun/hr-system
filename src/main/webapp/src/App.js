@@ -158,7 +158,7 @@ function App() {
                                         <EmployeeManagement loadUser={loadUser} />
                                     </Route>
                                     <Route exact={true} path={'/app/attendance/*'}>
-                                        <AttendanceManagement />
+                                        <AttendanceManagement loadUser={loadUser}/>
                                     </Route>
                                     <Route exact={true} path={'/app/salary/*'}>
                                         <SalaryManagement loadUser={loadUser} />
