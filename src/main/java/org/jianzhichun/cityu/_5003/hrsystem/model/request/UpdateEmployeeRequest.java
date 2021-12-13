@@ -10,6 +10,20 @@ import java.util.Date;
 
 @Data
 public class UpdateEmployeeRequest {
-    private String name, email, contact, address, gender;
-    private Date enrol, resign, birthday;
+    private String type;
+    private String email;
+    
+    private Date resignTime;
+    private Date enrolTime;
+
+    private String name;
+    private String gender;
+    private String address;
+    private String phoneNumber;
+
+    private Date birthday;
+    private Long positionId;
+    private Long departmentId;
+    private String departmentName;
+    private String positionName;
 }

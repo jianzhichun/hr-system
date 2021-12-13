@@ -47,13 +47,68 @@ create table if not exists employee (
     email varchar(128) unique,
     password varchar(128),
     type varchar(32),
-    resign_time timestamp,
-    enrol_time timestamp,
+    resign_time date,
+    enrol_time date,
     name varchar(32),
     gender varchar(16),
     address varchar(128),
     phone_number varchar(64),
-    birthday timestamp,
+    birthday date,
     position_id bigint,
     department_id bigint
-)
+);
+
+insert into
+    department
+select
+    *
+from
+    (
+        select
+            1,
+            'develop'
+        union
+        select
+            2,
+            'bussiness'
+        union
+        select
+            3,
+            'other'
+    ) x
+where
+    not exists(
+        select
+            *
+        from
+            department
+    );
+
+insert into
+    position
+select
+    *
+from
+    (
+        select
+            1,
+            'officer',
+            '1'
+        union
+        select
+            2,
+            'assitant manager',
+            '2'
+        union
+        select
+            3,
+            'manager',
+            '3'
+    ) x
+where
+    not exists(
+        select
+            *
+        from
+            position
+    );
