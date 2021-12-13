@@ -5,11 +5,9 @@ import java.util.List;
 
 import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
 import org.jianzhichun.cityu._5003.hrsystem.model.po.Employee;
 
-@Mapper
 public interface EmployeeMapper {
 
     @Insert("insert into employee(name, email, enrol_time, birthday, phone_number, address, gender) values(#{name}, #{email}, #{enrolTime}, #{birthday}, #{phoneNumber}, #{address}, #{gender})")

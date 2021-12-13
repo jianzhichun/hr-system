@@ -1,7 +1,6 @@
 package org.jianzhichun.cityu._5003.hrsystem.mapper;
 
 import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
 import org.jianzhichun.cityu._5003.hrsystem.model.po.Employee;
 
@@ -12,7 +11,6 @@ import java.util.List;
  * @version 1.0
  * @date 12/11/2021 10:16 PM
  */
-@Mapper
 public interface AccountMapper {
 
 

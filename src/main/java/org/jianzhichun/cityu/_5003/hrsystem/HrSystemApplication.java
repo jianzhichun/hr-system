@@ -14,7 +14,7 @@ import cn.dev33.satoken.interceptor.SaAnnotationInterceptor;
  * @version 1.0
  * @date 12/11/2021 10:16 PM
  */
-@MapperScan("org.jianzhichun.cityu._5003.hrsystem.model")
+@MapperScan("org.jianzhichun.cityu._5003.hrsystem")
 @SpringBootApplication
 public class HrSystemApplication implements WebMvcConfigurer {
 

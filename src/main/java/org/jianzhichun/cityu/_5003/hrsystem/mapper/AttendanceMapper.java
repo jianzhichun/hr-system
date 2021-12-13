@@ -9,8 +9,6 @@ import java.util.List;
 /**
  * @author Zefeng Wang
  */
-
-@Mapper
 public interface AttendanceMapper {
 
     @Select("select * from attendance")
