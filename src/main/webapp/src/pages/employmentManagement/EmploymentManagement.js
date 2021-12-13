@@ -7,6 +7,7 @@ import { Route, Switch } from "react-router";
 import NewEmployment from "./new/NewEmployment";
 import ManageEmployment from "./manage/ManageEmployment";
 import { useEffect } from "react";
+import AnalysisManagement from "./analysis/AnalysisManagement";
 
 export default function EmploymentManagement(props) {
 
@@ -30,6 +31,11 @@ export default function EmploymentManagement(props) {
                             Manage
                         </Link>
                     </Menu.Item>
+                    <Menu.Item>
+                        <Link to={'/app/employment/analysis'}>
+                            Analysis
+                        </Link>
+                    </Menu.Item>
                 </Menu>
             </Sider>
             <Layout>
@@ -46,6 +52,9 @@ export default function EmploymentManagement(props) {
                             </Route>
                             <Route path={'/app/employment/main'}>
                                 <ManageEmployment />
+                            </Route>
+                            <Route path={'/app/employment/analysis'}>
+                                <AnalysisManagement />
                             </Route>
                         </Switch>
                     </HashRouter>

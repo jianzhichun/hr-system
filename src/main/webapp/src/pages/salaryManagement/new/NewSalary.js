@@ -59,7 +59,7 @@ export default function NewSalary() {
             if (code === 0) {
                 message.success('Success!');
             } else {
-                console.log(response);
+                message.error(response.data.message);
             }
         }).catch(e => {
             console.log(e);

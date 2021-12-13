@@ -7,6 +7,7 @@ import org.jianzhichun.cityu._5003.hrsystem.model.po.Salary;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Map;
 
 
 /**
@@ -16,6 +17,9 @@ import java.util.List;
  */
 public interface SalaryMapper {
 
+
+    @Select("select count(*) from salary where employee_id = #{employeeId}")
+    int selectCountByEmployeeId(Long employeeId);
 
     @Insert("insert into salary(employee_id, amount) values(#{employeeId}, #{amount})")
     void insert(Long employeeId, BigDecimal amount);
@@ -28,4 +32,7 @@ public interface SalaryMapper {
 
     @Update("delete from salary where id = #{id}")
     void delete(Long id);
+
+    @Select("select department_name, sum(amount) sum  from ( select s.amount, d.name department_name from salary s left join employee e on s.employee_id = e.id left join department d on e.department_id = d.id ) tmp group by department_name")
+    List<Map<String, BigDecimal>> amountSumByDevelopment();
 }

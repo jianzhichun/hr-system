@@ -10,7 +10,7 @@ import SignUp from "./pages/signUp/SignUp";
 import EmployeeManagement from "./pages/employeeManagement/EmployeeManagement";
 import Layout, { Header, Footer, Content } from "antd/es/layout/layout";
 import { useEffect, useState } from "react";
-import { Dropdown, Menu, Divider } from "antd";
+import { Dropdown, Menu, Divider, Avatar } from "antd";
 import { RedEnvelopeOutlined, SmileTwoTone, TableOutlined, TeamOutlined, UsergroupAddOutlined, CodepenOutlined } from "@ant-design/icons";
 import { DownOutlined } from '@ant-design/icons';
 import AttendanceManagement from "./pages/attendanceManagement/AttendanceManagement";
@@ -78,10 +78,6 @@ function App() {
     const menu = (
         <Menu>
             <Menu.Item>
-                <Link to={'/app/profile/'}>Profile</Link>
-            </Menu.Item>
-            <Menu.Divider />
-            <Menu.Item>
                 <span className={'red-text'} onClick={logout}>Log out</span>
             </Menu.Item>
         </Menu>
@@ -138,7 +134,7 @@ function App() {
                             {user !== null &&
                                 <Dropdown overlay={menu} trigger={['click']}>
                                     <a className="ant-dropdown-link" onClick={e => e.preventDefault()}>
-                                        {user.name} <DownOutlined />
+                                        <Avatar size={30}>{user.name[0]}</Avatar>&nbsp; {user.name} <DownOutlined />
                                     </a>
                                 </Dropdown>}
                         </Header>

@@ -56,7 +56,7 @@ public class AccountController {
     @PostMapping("/register")
     public Response<Void> register(@RequestBody SignUpRequest request) {
         if (accountMapper.selectCountByEmail(request.getEmail()) > 1) {
-            return new Response<>(404, "This email has been taken");
+            return new Response<>(304, "This email has been taken");
         }
 
         accountMapper.insert(request.getName(), request.getEmail(), HashUtil.sha256(request.getPassword()));

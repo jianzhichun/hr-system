@@ -7,6 +7,8 @@ import { Route, Switch } from "react-router";
 import NewJobOffer from "./new/NewJobOffer";
 import ManageJobOffer from "./manage/ManageJobOffer";
 import { useEffect } from "react";
+import AnalysisJobOffer from "./analysis/AnalysisJobOffer";
+
 
 export default function JobOfferManagement(props) {
 
@@ -30,6 +32,11 @@ export default function JobOfferManagement(props) {
                             Manage
                         </Link>
                     </Menu.Item>
+                    <Menu.Item>
+                        <Link to={'/app/joboffer/analysis'}>
+                            Analysis
+                        </Link>
+                    </Menu.Item>
                 </Menu>
             </Sider>
             <Layout>
@@ -46,6 +53,9 @@ export default function JobOfferManagement(props) {
                             </Route>
                             <Route path={'/app/joboffer/main'}>
                                 <ManageJobOffer />
+                            </Route>
+                            <Route path={'/app/joboffer/analysis'}>
+                                <AnalysisJobOffer />
                             </Route>
                         </Switch>
                     </HashRouter>

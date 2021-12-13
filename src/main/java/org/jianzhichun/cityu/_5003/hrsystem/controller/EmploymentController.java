@@ -2,6 +2,9 @@ package org.jianzhichun.cityu._5003.hrsystem.controller;
 
 
 import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
@@ -52,6 +55,14 @@ public class EmploymentController {
     public Response<PageInfo<Application>> page(@RequestParam(name = "page", defaultValue = "1") int page,
             @RequestParam(name = "size", defaultValue = "10") int size) {
         return new Response<>(PageHelper.startPage(page, size).doSelectPageInfo(() -> applicationMapper.findAll()));
+    }
+
+    @GetMapping("/countByJobAndStatus")
+    public Response<Map<String, List<Map<String, Long>>>> countByDepartment() {
+        Map<String, List<Map<String, Long>>> map = new HashMap<>();
+        map.put("job", applicationMapper.countByJobTitle());
+        map.put("status", applicationMapper.countByStatus());
+        return new Response<>(map);
     }
 
 }

@@ -1,6 +1,8 @@
 package org.jianzhichun.cityu._5003.hrsystem.controller;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
@@ -58,4 +60,11 @@ public class JobOfferController {
         return new Response<>(PageHelper.startPage(page, size).doSelectPageInfo(() -> jobOfferMapper.findAll()));
     }
 
+    @GetMapping("/countByDepartmentAndStatus")
+    public Response<Map<String, List<Map<String, Long>>>> countByDepartment() {
+        Map<String, List<Map<String, Long>>> map = new HashMap<>();
+        map.put("department", jobOfferMapper.countByDepartment());
+        map.put("status", jobOfferMapper.countByStatus());
+        return new Response<>(map);
+    }
 }

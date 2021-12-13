@@ -6,6 +6,7 @@ import { HashRouter, Link } from "react-router-dom";
 import { Route, Switch } from "react-router";
 import NewSalary from "./new/NewSalary";
 import ManageSalary from "./manage/ManageSalary";
+import AnalysisSalary from "./analysis/AnalysisSalary";
 import { useEffect } from "react";
 
 export default function SalaryManagement(props) {
@@ -30,6 +31,11 @@ export default function SalaryManagement(props) {
                             Manage
                         </Link>
                     </Menu.Item>
+                    <Menu.Item>
+                        <Link to={'/app/salary/analysis'}>
+                            Analysis
+                        </Link>
+                    </Menu.Item>
                 </Menu>
             </Sider>
             <Layout>
@@ -46,6 +52,9 @@ export default function SalaryManagement(props) {
                             </Route>
                             <Route path={'/app/salary/main'}>
                                 <ManageSalary />
+                            </Route>
+                            <Route path={'/app/salary/analysis'}>
+                                <AnalysisSalary />
                             </Route>
                         </Switch>
                     </HashRouter>

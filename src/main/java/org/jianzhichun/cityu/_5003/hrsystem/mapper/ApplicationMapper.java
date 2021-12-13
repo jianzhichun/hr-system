@@ -7,6 +7,7 @@ import org.jianzhichun.cityu._5003.hrsystem.model.po.Application;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author Zhang Zao
@@ -27,5 +28,11 @@ public interface ApplicationMapper {
 
     @Select("select a.*, o.title jobTitle from application a left join job_offer o on a.job_offer_id = o.id")
     List<Application> findAll();
+
+    @Select("select job, count(1) count from (select o.title job from application a left join job_offer o on a.job_offer_id = o.id) tmp group by job")
+    List<Map<String, Long>> countByJobTitle();
+
+    @Select("select status, count(1) count from application group by status")
+    List<Map<String, Long>> countByStatus();
 
 }

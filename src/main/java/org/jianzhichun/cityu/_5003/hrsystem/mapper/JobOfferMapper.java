@@ -7,6 +7,7 @@ import org.jianzhichun.cityu._5003.hrsystem.model.po.JobOffer;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author Zhang Zao
@@ -24,10 +25,16 @@ public interface JobOfferMapper {
     @Select("select s.*, d.name department_name, p.name position_name from job_offer s, department d, position p where s.department_id = d.id and s.position_id = p.id")
     List<JobOffer> findAll();
 
-    @Update("update job_offer set title = #{title}, number=#{number}, due_date=#{dueDate}, department_id=#{departmentId}, position_id=#{positionId} where id = #{id}")
+    @Update("update job_offer set title = #{title}, number=#{number}, due_date=#{dueDate}, status=#{status}, department_id=#{departmentId}, position_id=#{positionId} where id = #{id}")
     void update(Long id, String title, Long number, Date dueDate, String status, Long departmentId, Long positionId);
 
     @Update("delete from job_offer where id = #{id}")
     void delete(Long id);
+
+    @Select("select d.name, count(1) count from job_offer j, department d where j.department_id=d.id group by d.name")
+    List<Map<String, Long>> countByDepartment();
+
+    @Select("select status, count(1) count from job_offer group by status")
+    List<Map<String, Long>> countByStatus();
 
 }
