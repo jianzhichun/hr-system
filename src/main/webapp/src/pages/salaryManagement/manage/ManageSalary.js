@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import { message, Table, Input, InputNumber, Popconfirm, Form, Typography } from 'antd';
+import { message, Table, Input, Button, InputNumber, Popconfirm, Form, Typography } from 'antd';
 import axios from "axios";
 import { GET, POST } from "../../../util/string";
-
+import { SearchOutlined } from '@ant-design/icons';
+import { Row, Col, Divider } from 'antd';
 
 export default function SalaryManagement() {
 
@@ -54,10 +55,10 @@ export default function SalaryManagement() {
             pageSize: 10,
         }),
         [editingKey, setEditingKey] = useState(''),
-        fetch = (pagination) => {
+        fetch = (param) => {
             return axios({
                 method: GET,
-                url: `/api/salary/page?page=${pagination.current}&size=${pagination.pageSize}`
+                url: `/api/salary/page?page=${param.current}&size=${param.pageSize}${(param.amount && param.amount[0].start && '&amountStart=' + param.amount[0].start) || ''}${(param.amount && param.amount[0].end && '&amountEnd=' + param.amount[0].end) || ''}`
             }).then(({ data: { code, message, data } }) => {
                 if (code !== 0) {
                     message.error({ content: message })
@@ -119,7 +120,7 @@ export default function SalaryManagement() {
             console.log('Validate Failed:', errInfo);
         }
     };
-
+    const [form1] = Form.useForm();
     const columns = [
         {
             title: 'Employee',
@@ -136,6 +137,49 @@ export default function SalaryManagement() {
             dataIndex: 'amount',
             width: '40%',
             editable: true,
+            filterDropdown: ({ setSelectedKeys, selectedKeys, confirm, clearFilters }) => {
+                return (<div style={{ padding: 8, margin: 10, width: '300px' }}>
+                    <Form labelCol={{ span: 10 }} form={form1}
+                        wrapperCol={{ span: 150 }}
+                    >
+                        <Form.Item label={"Start:"} name={'start'}>
+                            <InputNumber
+
+                                min="0"
+                                step="0.000001"
+                                stringMode
+                                value={selectedKeys[0] && selectedKeys[0].start}
+                                onChange={e => setSelectedKeys(e ? [{ ...selectedKeys[0], start: e }] : [])}
+                                style={{ marginBottom: 8, display: 'block', width: '100px' }}
+                            />
+                        </Form.Item>
+                        <Form.Item label={"End:"} name={'end'} >
+                            <InputNumber
+                                min="0"
+                                step="0.000001"
+                                stringMode
+                                value={selectedKeys[0] && selectedKeys[0].start}
+                                onChange={e => setSelectedKeys(e ? [{ ...selectedKeys[0], end: e }] : [])}
+                                style={{ marginBottom: 8, display: 'block', width: '100px' }}
+                            />
+                        </Form.Item>
+                        <Form.Item wrapperCol={{ offset: 4, span: 16 }}>
+                            <Button type={'primary'} htmlType="submit" onClick={() => confirm()}
+                                icon={<SearchOutlined />}
+                                size="small">
+                                Search
+                            </Button> &nbsp;
+                            <Button onClick={() => { clearFilters(); setSelectedKeys([]); form1.resetFields();}} size="small" style={{ width: 90 }}>
+                                Reset
+                            </Button>
+                        </Form.Item>
+                    </Form>
+                </div>)
+            },
+            filterIcon: filtered => <SearchOutlined style={{ color: filtered ? '#1890ff' : undefined }} />,
+            onFilter: ({ start, end }, record) => {
+                return record.amount >= start && record.amount < end;
+            }
         },
         {
             title: 'operation',
@@ -209,15 +253,15 @@ export default function SalaryManagement() {
                                 cell: EditableCell,
                             },
                         }}
+                        onChange={(pagination, filters, sorter, extra) => {
+                            fetch({ ...pagination, ...filters }).then(() => setEditingKey(''))
+                        }}
                         bordered
                         dataSource={data}
                         columns={mergedColumns}
                         rowClassName="editable-row"
                         pagination={{
-                            ...pagination,
-                            onChange: page => {
-                                fetch({ ...pagination, current: page }).then(() => setEditingKey(''))
-                            },
+                            ...pagination
                         }}
                     />
                 </Form>

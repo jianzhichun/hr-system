@@ -2,7 +2,6 @@ package org.jianzhichun.cityu._5003.hrsystem.controller;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import org.jianzhichun.cityu._5003.hrsystem.model.po.Attendance;
 import org.jianzhichun.cityu._5003.hrsystem.model.po.Employee;
 import org.jianzhichun.cityu._5003.hrsystem.mapper.AccountMapper;
 import org.jianzhichun.cityu._5003.hrsystem.mapper.EmployeeMapper;
@@ -10,12 +9,14 @@ import org.jianzhichun.cityu._5003.hrsystem.model.request.AddEmployeeRequest;
 import org.jianzhichun.cityu._5003.hrsystem.model.request.UpdateEmployeeRequest;
 import org.jianzhichun.cityu._5003.hrsystem.utils.Response;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.*;
 
 import cn.dev33.satoken.annotation.SaCheckLogin;
 
 import lombok.extern.slf4j.Slf4j;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -62,8 +63,12 @@ public class EmployeeController {
     }
 
     @GetMapping("/page")
-    public Response<PageInfo<Attendance>> page(@RequestParam("page") int page, @RequestParam("size") int size) {
-        return new Response<>(PageHelper.startPage(page, size).doSelectPageInfo(() -> employeeMapper.findAll()));
+    public Response<PageInfo<Employee>> page(
+        @RequestParam(required = false) String name, @RequestParam(required = false) Long departmentId, @RequestParam(required = false) Long positionId, 
+        @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") Date enrolTime,
+        @RequestParam("page") int page, @RequestParam("size") int size
+    ) {
+        return new Response<>(PageHelper.startPage(page, size).doSelectPageInfo(() -> employeeMapper.findAll(name, departmentId, positionId, enrolTime)));
     }
 
     @PostMapping("/delete/{id}")
@@ -75,5 +80,15 @@ public class EmployeeController {
     @GetMapping("/countByGender")
     public Response<List<Map<String, Long>>> countByGender() {
         return new Response<>(employeeMapper.countByGender());
+    }
+
+    @GetMapping("/countByDepartmentAndLevel")
+    public Response<List<Map<String, Long>>> countByDepartmentAndLevel() {
+        return new Response<>(employeeMapper.countByDepartmentAndLevel());
+    }
+
+    @GetMapping("/countByDepartment")
+    public Response<List<Map<String, Long>>> countByDepartment() {
+        return new Response<>(employeeMapper.countByDepartment());
     }
 }

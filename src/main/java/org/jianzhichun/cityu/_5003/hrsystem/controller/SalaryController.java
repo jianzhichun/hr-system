@@ -1,6 +1,5 @@
 package org.jianzhichun.cityu._5003.hrsystem.controller;
 
-
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
@@ -31,11 +30,11 @@ public class SalaryController {
 
     @Autowired
     private SalaryMapper salaryMapper;
-    
+
     @PostMapping("/add")
     public Response<Void> insert(@RequestBody AddSalaryRequest request) {
         if (salaryMapper.selectCountByEmployeeId(request.getEmployeeId()) > 0) {
-            return new Response<>(304, "The employee already has salary."); 
+            return new Response<>(304, "The employee already has salary.");
         }
         salaryMapper.insert(request.getEmployeeId(), request.getAmount());
         return new Response<>();
@@ -59,9 +58,12 @@ public class SalaryController {
     }
 
     @GetMapping("/page")
-    public Response<PageInfo<Salary>> page(@RequestParam(name = "page", defaultValue = "1") int page,
+    public Response<PageInfo<Salary>> page(
+            @RequestParam(required = false) String amountStart, @RequestParam(required = false) String amountEnd,
+            @RequestParam(name = "page", defaultValue = "1") int page,
             @RequestParam(name = "size", defaultValue = "10") int size) {
-        return new Response<>(PageHelper.startPage(page, size).doSelectPageInfo(() -> salaryMapper.findAll()));
+        return new Response<>(
+                PageHelper.startPage(page, size).doSelectPageInfo(() -> salaryMapper.findAll(null == amountStart ? null : new BigDecimal(amountStart), null == amountEnd ? null     : new BigDecimal(amountEnd))));
     }
 
 }

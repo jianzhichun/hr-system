@@ -9,7 +9,6 @@ import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
 
-
 /**
  * @author Zhang Zao
  * @version 1.0
@@ -17,15 +16,24 @@ import java.util.Map;
  */
 public interface SalaryMapper {
 
-
     @Select("select count(*) from salary where employee_id = #{employeeId}")
     int selectCountByEmployeeId(Long employeeId);
 
     @Insert("insert into salary(employee_id, amount) values(#{employeeId}, #{amount})")
     void insert(Long employeeId, BigDecimal amount);
 
-    @Select("select s.id, s.employee_id, e.department_id, s.amount, CONCAT(e.name, '(', e.email,  ')') employee_name, d.name department_name from salary s left join employee e on s.employee_id = e.id left join department d on e.department_id = d.id")
-    List<Salary> findAll();
+    @Select({
+            "<script>",
+            "select s.id, s.employee_id, e.department_id, s.amount, CONCAT(e.name, '(', e.email,  ')') employee_name, d.name department_name from salary s left join employee e on s.employee_id = e.id left join department d on e.department_id = d.id where 1=1 ",
+            "<when test='amountStart!=null'>",
+            "and s.amount > #{amountStart} ",
+            "</when>",
+            "<when test='amountEnd!=null'>",
+            "<![CDATA[ and  s.amount < #{amountEnd} ]]> ",
+            "</when>",
+            "</script>"
+    })
+    List<Salary> findAll(BigDecimal amountStart, BigDecimal amountEnd);
 
     @Update("update salary set amount = #{amount} where id = #{id}")
     void update(Long id, BigDecimal amount);

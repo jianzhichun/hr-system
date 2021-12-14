@@ -5,6 +5,7 @@ import { GET, POST } from "../../../util/string";
 import { Select, Spin } from 'antd';
 import debounce from 'lodash/debounce';
 import moment from 'moment';
+import { SearchOutlined } from '@ant-design/icons';
 
 const DebounceSelect = ({ fetchOptions, firstOptions, debounceTimeout = 50, ...props }) => {
     const [fetching, setFetching] = useState(false);
@@ -31,6 +32,7 @@ const DebounceSelect = ({ fetchOptions, firstOptions, debounceTimeout = 50, ...p
     }, [fetchOptions, debounceTimeout]);
     return (
         <Select
+            allowClear
             showSearch
             filterOption={false}
             onSearch={debounceFetcher}
@@ -54,6 +56,63 @@ export default function EmployeeManagement() {
             url: `/api/position/queryByName?name=${name}`
         }).then(({ data: { code, message, data } }) => data.map(item => ({ label: `${item.name}(${item.level})`, value: item.id })))
     };
+
+    const getColumnSearchProps = (dataIndex, type) => ({
+        filterDropdown: ({ setSelectedKeys, selectedKeys, confirm, clearFilters }) => {
+            if (type === 'date') {
+                return (<div style={{ padding: 8 }}>
+                    <DatePicker
+                        placeholder={`Search ${dataIndex}`}
+                        value={selectedKeys[0]}
+                        onChange={e => { setSelectedKeys(e ? [e] : []); confirm(); }}
+                        style={{ marginBottom: 8, display: 'block', width: '90px' }}
+                    />
+                </div>)
+            } else if (type === 'department') {
+                return (<div style={{ padding: 8 }}>
+                    <DebounceSelect
+                        placeholder="Select department by name"
+                        fetchOptions={fetchDepartmentsByName}
+                        onChange={e => { setSelectedKeys(e ? [e] : []); confirm(); }}
+                        style={{ marginBottom: 8, display: 'block', width: '140px' }}
+                    />
+                </div>)
+            } else if (type === 'position') {
+                return (<div style={{ padding: 8 }}>
+                    <DebounceSelect
+                        placeholder="Select position by name"
+                        fetchOptions={fetchPositionsByName}
+                        onChange={e => { setSelectedKeys(e ? [e] : []); confirm(); }}
+                        style={{ marginBottom: 8, display: 'block', width: '140px' }}
+                    />
+                </div>)
+            } else {
+                return (<div style={{ padding: 8 }}>
+                    <Input
+                        placeholder={`Search ${dataIndex}`}
+                        value={selectedKeys[0]}
+                        onChange={e => setSelectedKeys(e.target.value ? [e.target.value] : [])}
+                        onPressEnter={() => confirm()}
+                        style={{ marginBottom: 8, display: 'block', width: '100px' }}
+                    />
+                </div>)
+            }
+
+        },
+        filterIcon: filtered => <SearchOutlined style={{ color: filtered ? '#1890ff' : undefined }} />,
+        onFilter: (value, record) => {
+            if (type === 'date') {
+                return record[dataIndex].format('YYYY-MM-DD') === value.format('YYYY-MM-DD');
+            } else if (type == 'text') {
+                return record[dataIndex]
+                    ? record[dataIndex].toString().toLowerCase().includes(value.toLowerCase())
+                    : ''
+            } else {
+                return record[dataIndex] == value;
+            }
+
+        }
+    });
 
     const EditableCell = ({
         editing,
@@ -122,10 +181,10 @@ export default function EmployeeManagement() {
             pageSize: 10,
         }),
         [editingKey, setEditingKey] = useState(''),
-        fetch = (pagination) => {
+        fetch = (param) => {
             return axios({
                 method: GET,
-                url: `/api/employee/page?page=${pagination.current}&size=${pagination.pageSize}`
+                url: `/api/employee/page?page=${param.current}&size=${param.pageSize}${(param.name && '&name=' + param.name) || ''}${(param.departmentId && '&departmentId=' + param.departmentId) || ''}${(param.positionId && '&positionId=' + param.positionId) || ''}${(param.enrolTime && '&enrolTime=' + param.enrolTime[0].format('YYYY-MM-DD')) || ''}`
             }).then(({ data: { code, message, data } }) => {
                 if (code !== 0) {
                     message.error({ content: message })
@@ -191,32 +250,37 @@ export default function EmployeeManagement() {
     const columns = [
         {
             title: 'Name',
+            width: 120,
             dataIndex: 'name',
-            width: '10%',
+            ...getColumnSearchProps('name', 'text'),
             editable: true
         },
         {
             title: 'Email',
             dataIndex: 'email',
-            width: '10%',
+            width: 120,
+            ...getColumnSearchProps('email', 'text'),
             editable: true
         },
         {
             title: 'Address',
             dataIndex: 'address',
-            width: '10%',
+            width: 120,
+            ...getColumnSearchProps('address', 'text'),
             editable: true
         },
         {
             title: 'Contract',
             dataIndex: 'phoneNumber',
-            width: '10%',
+            width: 120,
+            ...getColumnSearchProps('phoneNumber', 'text'),
             editable: true
         },
         {
             title: 'Birthday',
             dataIndex: 'birthday',
-            width: '15%',
+            width: 120,
+            ...getColumnSearchProps('birthday', 'date'),
             editable: true,
             render: (_, record) => {
                 return <>{record.birthday && record.birthday != null && record.birthday.format("YYYY-MM-DD")}</>
@@ -225,8 +289,9 @@ export default function EmployeeManagement() {
         {
             title: 'Enroll Date',
             dataIndex: 'enrolTime',
-            width: '15%',
+            width: 120,
             editable: true,
+            ...getColumnSearchProps('enrolTime', 'date'),
             render: (_, record) => {
                 return <>{record.enrolTime && record.birthday != null && record.enrolTime.format("YYYY-MM-DD")}</>
             }
@@ -234,8 +299,9 @@ export default function EmployeeManagement() {
         {
             title: 'Resign Date',
             dataIndex: 'resignTime',
-            width: '15%',
+            width: 120,
             editable: true,
+            ...getColumnSearchProps('resignTime', 'date'),
             render: (_, record) => {
                 return <>{record.resignTime && record.birthday != null && record.resignTime.format("YYYY-MM-DD")}</>
             }
@@ -243,8 +309,9 @@ export default function EmployeeManagement() {
         {
             title: 'Gender',
             dataIndex: 'gender',
-            width: '10%',
+            width: 80,
             editable: true,
+            ...getColumnSearchProps('gender', 'text'),
             render: (_, record) => {
                 return <>{record['gender']}</>
             }
@@ -252,8 +319,9 @@ export default function EmployeeManagement() {
         {
             title: 'Department',
             dataIndex: 'departmentId',
-            width: '15%',
+            width: 150,
             editable: true,
+            ...getColumnSearchProps('departmentId', 'department'),
             render: (_, record) => {
                 return <>{record.departmentName}</>
             }
@@ -261,14 +329,17 @@ export default function EmployeeManagement() {
         {
             title: 'Position',
             dataIndex: 'positionId',
-            width: '15%',
+            width: 150,
             editable: true,
+            ...getColumnSearchProps('positionId', 'position'),
             render: (_, record) => {
                 return <>{record.positionName}</>
             }
         },
         {
             title: 'operation',
+            width: 200,
+            fixed: 'right',
             dataIndex: 'operation',
             render: (_, record) => {
                 const editable = isEditing(record);
@@ -339,16 +410,15 @@ export default function EmployeeManagement() {
                                 cell: EditableCell,
                             },
                         }}
+                        onChange={(pagination, filters, sorter, extra) => {
+                            fetch({ ...pagination, ...filters }).then(() => setEditingKey(''))
+                        }}
                         bordered
                         dataSource={data}
                         columns={mergedColumns}
                         rowClassName="editable-row"
-                        pagination={{
-                            ...pagination,
-                            onChange: page => {
-                                fetch({ ...pagination, current: page }).then(() => setEditingKey(''))
-                            },
-                        }}
+                        pagination={pagination}
+                        scroll={{ x: 1800 }}
                     />
                 </Form>
             </div>
