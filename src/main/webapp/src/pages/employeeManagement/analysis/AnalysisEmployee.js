@@ -6,54 +6,77 @@ import ReactECharts from 'echarts-for-react';
 
 export default function AnalysisEmployee() {
 
-    const [option1, setOption1] = useState();
+    const [gender, setGender] = useState();
+    const [departmentAndLevel, setDepartmentAndLevel] = useState();
+    const [category, setCategory] = useState();
 
     useEffect(() => {
         axios({
             method: GET,
             url: '/api/employee/countByGender'
         }).then(({ data: { data } }) => {
-            setOption1({
-                title: {
-                    text: 'Count By Gender'
+            setCategory(data.map(i => i.GENDER))
+            setGender({
+                name: 'Count By Gender',
+                type: 'pie',
+                radius: [20, 140],
+                center: ['25%', '50%'],
+                roseType: 'area',
+                itemStyle: {
+                    borderRadius: 5
                 },
-                tooltip: {
-                    trigger: 'axis'
-                },
-                toolbox: {
-                    feature: {
-                        saveAsImage: {}
+                emphasis: {
+                    label: {
+                        show: true
                     }
                 },
-                grid: {
-                    left: '3%',
-                    right: '4%',
-                    bottom: '3%',
-                    containLabel: true
+                data: data.map(i => ({ value: i.COUNT, name: i.GENDER }))
+            })
+        })
+        axios({
+            method: GET,
+            url: '/api/employee/countByDepartmentAndLevel'
+        }).then(({ data: { data } }) => {
+            setDepartmentAndLevel({
+                name: 'Count By Department And Position',
+                type: 'pie',
+                radius: [20, 140],
+                center: ['75%', '50%'],
+                z: 100,
+                roseType: 'radius',
+                itemStyle: {
+                    borderRadius: 5
                 },
-                xAxis: {
-                    type: 'category',
-                    data: data.map(i => i.GENDER)
-                },
-                yAxis: {
-                    type: 'value'
-                },
-                series: [
-                    {
-                        data: data.map(i => i.COUNT),
-                        type: 'bar',
-                        showBackground: true,
-                        backgroundStyle: {
-                            color: 'rgba(180, 180, 180, 0.2)'
-                        }
+                emphasis: {
+                    label: {
+                        show: true
                     }
-                ]
+                },
+                data: data.map(i => ({ value: i.COUNT, name: `${i.department.name} (${i.position.name})` }))
             })
         })
     }, [])
 
-    return (option1 && <ReactECharts
-        option={option1}
+    return (gender && <ReactECharts
+        option={{
+            tooltip: {
+                trigger: 'item'
+            },
+            legend: {
+                left: 'center',
+                top: 'bottom'
+            },
+            toolbox: {
+                show: true,
+                feature: {
+                    mark: { show: true },
+                    dataView: { show: true, readOnly: false },
+                    restore: { show: true },
+                    saveAsImage: { show: true }
+                }
+            },
+            series: [gender, departmentAndLevel]
+        }}
         style={{ height: 400 }}
     />) || <></>;
 }

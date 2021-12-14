@@ -4,7 +4,9 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.jianzhichun.cityu._5003.hrsystem.model.po.Employee;
 import org.jianzhichun.cityu._5003.hrsystem.mapper.AccountMapper;
+import org.jianzhichun.cityu._5003.hrsystem.mapper.DepartmentMapper;
 import org.jianzhichun.cityu._5003.hrsystem.mapper.EmployeeMapper;
+import org.jianzhichun.cityu._5003.hrsystem.mapper.PositionMapper;
 import org.jianzhichun.cityu._5003.hrsystem.model.request.AddEmployeeRequest;
 import org.jianzhichun.cityu._5003.hrsystem.model.request.UpdateEmployeeRequest;
 import org.jianzhichun.cityu._5003.hrsystem.utils.Response;
@@ -17,8 +19,10 @@ import cn.dev33.satoken.annotation.SaCheckLogin;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * @author Zhang Zao
@@ -33,6 +37,10 @@ public class EmployeeController {
 
     @Autowired
     private EmployeeMapper employeeMapper;
+    @Autowired
+    private DepartmentMapper departmentMapper;
+    @Autowired
+    private PositionMapper positionMapper;
     @Autowired
     private AccountMapper accountMapper;
 
@@ -78,17 +86,22 @@ public class EmployeeController {
     }
     
     @GetMapping("/countByGender")
-    public Response<List<Map<String, Long>>> countByGender() {
+    public Response<List<Map<String, Object>>> countByGender() {
         return new Response<>(employeeMapper.countByGender());
     }
 
     @GetMapping("/countByDepartmentAndLevel")
-    public Response<List<Map<String, Long>>> countByDepartmentAndLevel() {
-        return new Response<>(employeeMapper.countByDepartmentAndLevel());
+    public Response<List<Map<String, Object>>> countByDepartmentAndLevel() {
+        return new Response<>(employeeMapper.countByDepartmentAndLevel().stream().peek(m -> {
+            m.put("department", departmentMapper.findOne((Long)m.get("DEPARTMENT_ID")));
+            m.put("position", positionMapper.findOne((Long)m.get("POSITION_ID")));
+        }).collect(Collectors.toList()));
     }
 
     @GetMapping("/countByDepartment")
-    public Response<List<Map<String, Long>>> countByDepartment() {
-        return new Response<>(employeeMapper.countByDepartment());
+    public Response<List<Map<String, Object>>> countByDepartment() {
+        return new Response<>(employeeMapper.countByDepartment().stream().peek(m -> {
+            m.put("department", departmentMapper.findOne((Long)m.get("DEPARTMENT_ID")));
+        }).collect(Collectors.toList()));
     }
 }

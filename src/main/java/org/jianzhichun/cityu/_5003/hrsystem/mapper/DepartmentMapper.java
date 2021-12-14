@@ -13,6 +13,8 @@ import java.util.List;
  */
 public interface DepartmentMapper {
 
+    @Select("select * from department where id=#{id}")
+    Department findOne(Long id);
 
     @Select("select * from department;")
     List<Department> findAll();

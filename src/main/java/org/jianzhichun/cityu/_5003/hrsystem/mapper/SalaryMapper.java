@@ -43,4 +43,7 @@ public interface SalaryMapper {
 
     @Select("select department_name, sum(amount) sum  from ( select s.amount, d.name department_name from salary s left join employee e on s.employee_id = e.id left join department d on e.department_id = d.id ) tmp group by department_name")
     List<Map<String, BigDecimal>> amountSumByDevelopment();
+
+    @Select("select department_name, avg(amount) sum  from ( select s.amount, d.name department_name from salary s left join employee e on s.employee_id = e.id left join department d on e.department_id = d.id ) tmp group by department_name")
+    List<Map<String, BigDecimal>> amountAvgByDevelopment();
 }

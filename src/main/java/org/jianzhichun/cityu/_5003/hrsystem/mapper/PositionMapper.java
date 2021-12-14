@@ -13,6 +13,8 @@ import java.util.List;
  */
 public interface PositionMapper {
 
+    @Select("select * from position where id=#{id}")
+    Position findOne(Long id);
 
     @Select("select * from position;")
     List<Position> findAll();

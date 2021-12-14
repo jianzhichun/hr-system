@@ -57,6 +57,11 @@ public class SalaryController {
         return new Response<>(salaryMapper.amountSumByDevelopment());
     }
 
+    @GetMapping("/amountAvgByDevelopment")
+    public Response<List<Map<String, BigDecimal>>> amountAvgByDevelopment() {
+        return new Response<>(salaryMapper.amountAvgByDevelopment());
+    }
+
     @GetMapping("/page")
     public Response<PageInfo<Salary>> page(
             @RequestParam(required = false) String amountStart, @RequestParam(required = false) String amountEnd,

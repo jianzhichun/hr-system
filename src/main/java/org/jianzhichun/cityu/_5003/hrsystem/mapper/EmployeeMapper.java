@@ -56,11 +56,11 @@ public interface EmployeeMapper {
         void delete(Long id);
 
         @Select("select gender, count(1) count from employee group by gender")
-        List<Map<String, Long>> countByGender();
+        List<Map<String, Object>> countByGender();
 
-        @Select("select department_id, level, count(1) count from employee group by department_id, level")
-        List<Map<String, Long>> countByDepartmentAndLevel();
+        @Select("select department_id, position_id, count(1) count from employee group by department_id, position_id")
+        List<Map<String, Object>> countByDepartmentAndLevel();
 
         @Select("select department_id, count(1) count from employee group by department_id")
-        List<Map<String, Long>> countByDepartment();
+        List<Map<String, Object>> countByDepartment();
 }
